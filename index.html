@@ -19,7 +19,7 @@
             overflow: hidden;
             position: relative;
         }
-
+        
         #sidebar {
             width: 250px;
             background-color: #f9f9f9;
@@ -91,6 +91,40 @@
         margin-top: 70px !important; /* Отступ сверху */
         margin-left: 10px !important; /* Отступ слева (опционально) */
     }
+
+    #shop-info-panel {
+    width: 400px;
+    max-width: 100%;
+    background: white;
+    position: absolute;
+    right: -400px;
+    top: 0;
+    bottom: 0;
+    z-index: 1001;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease-in-out;
+    overflow-y: auto;
+}
+
+#shop-info-panel.show {
+    right: 0;
+}
+
+#shop-info-content {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#close-info {
+    float: right;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: -10px;
+    margin-right: -10px;
+}
+
     </style>
 </head>
 
@@ -103,7 +137,16 @@
             <label><input type="checkbox" class="filter-check" value="бутики" checked> Бутики</label><br>
             <label><input type="checkbox" class="filter-check" value="секонд" checked> Секонд-хенды</label>
         </div>
+
         <div id="map"></div>
+
+        <div id="shop-info-panel">
+    <div id="shop-info-content">
+        <span id="close-info">✕</span>
+        <div id="shop-info-body">Выберите магазин на карте</div>
+    </div>
+</div>
+
         <div class="toggle-sidebar">☰</div>
     </div>
 
@@ -126,13 +169,13 @@
 
         // Добавление свою кастомную атрибуцию
         L.control.attribution({ prefix: false }).addTo(map);
-        document.addEventListener("DOMContentLoaded", function () {
-            const attr = document.querySelector('.leaflet-control-attribution');
-            if (attr) {
-                attr.innerHTML = '<a href="https://github.com/petergriffinfunnymoments" target="_blank">' +
-                    '<img src="my-flag.png" alt="Флаг">ZoV</a>';
-            }
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('close-info');
+    const panel = document.getElementById('shop-info-panel');
+    closeBtn.addEventListener('click', () => {
+        panel.classList.remove('show');
+    });
+});
 
         // Добавление масштаба (смещаем ниже) - оставляем только этот контрол
         L.control.zoom({

@@ -6,10 +6,19 @@ const layersByCategory = {
     'секонд': L.layerGroup()
 };
 
-function createMarker(lat, lon, title, popup, icon, category) {
-    const marker = L.marker([lat, lon], { title, icon }).bindPopup(popup);
+function createMarker(lat, lon, title, popupHTML, icon, category) {
+    const marker = L.marker([lat, lon], { title, icon });
+
+    marker.on('click', () => {
+        const panel = document.getElementById('shop-info-panel');
+        const body = document.getElementById('shop-info-body');
+        panel.classList.add('show');
+        body.innerHTML = `<h3>${title}</h3>${popupHTML}`;
+    });
+
     layersByCategory[category].addLayer(marker);
 }
+
 
 // Иконки
 var parkIconClass = L.Icon.extend({
