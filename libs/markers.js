@@ -27,16 +27,16 @@ createMarker(55.7051843, 37.6407266, 'Bershka (Ривьера)',
     '<b>Bershka</b> → Ecru<br><b>Адрес: </b>Москва, Автозаводская ул., 18<br><b>Представленные бренды: </b>Bershka<br><b>Контакты: </b>+7 (499) 957-88-38, ecrubrand.com<br><img src="data/logos/ecru_logo.png" width="100px">',
     parkIconArray[0], 'ушли');  
 createMarker(55.7440113, 37.5671697, 'Pull & Bear (Площадь Киевского возкала)',
-    '<b>Pull & Bear</b> → Dub<br><b>Адрес: </b>Москва, Площадь Киевского вокзала, 2<b>Представленные бренды: </b>Pull & Bear<br><b>Контакты: </b>+7 (499) 957-88-19, dubapparels.com<br><img src="data/logos/dub_logo.png" width="100px">',
+    '<b>Pull & Bear</b> → Dub<br><b>Адрес: </b>Москва, Площадь Киевского вокзала, 2<br><b>Представленные бренды: </b>Pull & Bear<br><b>Контакты: </b>+7 (499) 957-88-19, dubapparels.com<br><img src="data/logos/dub_logo.png" width="100px">',
     parkIconArray[0], 'ушли');
 createMarker(55.7903887, 37.5318503, 'Pull & Bear (Авиапарк)',
-    '<b>Pull & Bear</b> → Dub<br><b>Адрес: </b>Москва, Ходынский бул., 4<b>Представленные бренды: </b>Pull & Bear<br><b>Контакты: </b>+7 (499) 957-88-19, dubapparels.com<br><img src="data/logos/dub_logo.png" width="100px">',
+    '<b>Pull & Bear</b> → Dub<br><b>Адрес: </b>Москва, Ходынский бул., 4<br><b>Представленные бренды: </b>Pull & Bear<br><b>Контакты: </b>+7 (499) 957-88-19, dubapparels.com<br><img src="data/logos/dub_logo.png" width="100px">',
     parkIconArray[0], 'ушли');
 createMarker(55.7903887, 37.5318503, 'Levis (Авиапарк)',
-    '<b>Levis</b> → JNS<br><b>Адрес: </b>Москва, Ходынский бул., 4<b>Представленные бренды: </b>Levis, Nike, Adidas<br><b>Контакты: </b>+7(495) 127-78-95, jnsonline.ru<br><img src="data/logos/jns_logo.png" width="100px">',
+    '<b>Levis</b> → JNS<br><b>Адрес: </b>Москва, Ходынский бул., 4<br><b>Представленные бренды: </b>Levis, Nike, Adidas<br><b>Контакты: </b>+7(495) 127-78-95, jnsonline.ru<br><img src="data/logos/jns_logo.png" width="100px">',
     parkIconArray[0], 'ушли');
 createMarker(55.7440113, 37.5671697, 'Levis (Пл. Киевского вокзала)',
-    '<b>Levis</b> → JNS<br><b>Адрес: </b>Москва, Площадь Киевского вокзала, 2<b>Представленные бренды: </b>Levis, Nike, Adidas<br><b>Контакты: </b>+7(495) 127-78-95, jnsonline.ru<br><img src="data/logos/jns_logo.png" width="100px">',
+    '<b>Levis</b> → JNS<br><b>Адрес: </b>Москва, Площадь Киевского вокзала, 2<br><b>Представленные бренды: </b>Levis, Nike, Adidas<br><b>Контакты: </b>+7(495) 127-78-95, jnsonline.ru<br><img src="data/logos/jns_logo.png" width="100px">',
     parkIconArray[0], 'ушли');
 
 // Реселлеры

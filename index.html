@@ -26,7 +26,7 @@
             padding: 15px;
             border-right: 1px solid #ccc;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            position: absolute;
+            position: fixed;
             left: -250px;
             top: 0;
             bottom: 0;
@@ -41,15 +41,6 @@
         #map {
             flex: 1;
             height: 100%;
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        #map.sidebar-open {
-            margin-left: 250px;
-        }
-
-        .filter-check {
-            margin: 10px 0;
         }
 
         h1, h3 {
@@ -71,7 +62,7 @@
 
         /* Кнопка для управления панелью */
         .toggle-sidebar {
-            position: absolute;
+            position: fixed;
             left: 10px;
             top: 10px;
             background: #fff;
@@ -81,50 +72,58 @@
             cursor: pointer;
             z-index: 1001;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            transition: left 0.3s ease-in-out;
         }
 
         .toggle-sidebar.sidebar-open {
             left: 260px;
         }
 
+        /* Стили для кнопок масштаба */
         .leaflet-control-zoom {
-        margin-top: 70px !important; /* Отступ сверху */
-        margin-left: 10px !important; /* Отступ слева (опционально) */
-    }
+            position: fixed;
+            left: 10px;
+            bottom: 20px;
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+        }
 
-    #shop-info-panel {
-    width: 400px;
-    max-width: 100%;
-    background: white;
-    position: absolute;
-    right: -400px;
-    top: 0;
-    bottom: 0;
-    z-index: 1001;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-    transition: right 0.3s ease-in-out;
-    overflow-y: auto;
-}
+        .leaflet-control-zoom.sidebar-open {
+            left: 260px;
+        }
 
-#shop-info-panel.show {
-    right: 0;
-}
+        #shop-info-panel {
+            width: 400px;
+            max-width: 100%;
+            background: white;
+            position: absolute;
+            right: -400px;
+            top: 0;
+            bottom: 0;
+            z-index: 1001;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            transition: right 0.3s ease-in-out;
+            overflow-y: auto;
+        }
 
-#shop-info-content {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
+        #shop-info-panel.show {
+            right: 0;
+        }
 
-#close-info {
-    float: right;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: -10px;
-    margin-right: -10px;
-}
+        #shop-info-content {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
 
+        #close-info {
+            float: right;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: -10px;
+            margin-right: -10px;
+        }
     </style>
 </head>
 
@@ -141,11 +140,11 @@
         <div id="map"></div>
 
         <div id="shop-info-panel">
-    <div id="shop-info-content">
-        <span id="close-info">✕</span>
-        <div id="shop-info-body">Выберите магазин на карте</div>
-    </div>
-</div>
+            <div id="shop-info-content">
+                <span id="close-info">✕</span>
+                <div id="shop-info-body">Выберите магазин на карте</div>
+            </div>
+        </div>
 
         <div class="toggle-sidebar">☰</div>
     </div>
@@ -157,30 +156,38 @@
     <script>
         // Инициализация карты с центром в Москве
         const map = L.map('map', {
-            attributionControl: false, // отключает блок атрибуции полностью
-            zoomControl: false
+            attributionControl: false,
+            zoomControl: false // Отключаем стандартный zoomControl
         }).setView([55.751244, 37.618423], 11);
 
         // Добавление слой без атрибуции
         L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-            attribution: '', // убираем стандартную ссылку
+            attribution: '',
             maxZoom: 19
         }).addTo(map);
 
         // Добавление свою кастомную атрибуцию
         L.control.attribution({ prefix: false }).addTo(map);
+        
         document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.getElementById('close-info');
-    const panel = document.getElementById('shop-info-panel');
-    closeBtn.addEventListener('click', () => {
-        panel.classList.remove('show');
-    });
-});
+            const closeBtn = document.getElementById('close-info');
+            const panel = document.getElementById('shop-info-panel');
+            closeBtn.addEventListener('click', () => {
+                panel.classList.remove('show');
+            });
+        });
 
-        // Добавление масштаба (смещаем ниже) - оставляем только этот контрол
-        L.control.zoom({
-            position: 'topleft'
+        // Создаем кастомный zoomControl
+        const zoomControl = L.control.zoom({
+            position: 'bottomleft' // Это не влияет на наше позиционирование, так как мы переопределили стили
         }).addTo(map);
+
+        // Перемещаем элемент zoomControl в нужное место
+        const zoomElement = document.querySelector('.leaflet-control-zoom');
+        zoomElement.style.position = 'fixed';
+        zoomElement.style.left = '10px';
+        zoomElement.style.bottom = '20px';
+        zoomElement.style.transition = 'left 0.3s ease-in-out';
 
         // Граница Москвы 
         fetch('map.geojson')
@@ -202,19 +209,19 @@
         document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.querySelector('.toggle-sidebar');
-            const mapElement = document.getElementById('map');
+            const zoomControl = document.querySelector('.leaflet-control-zoom');
             
             // Обработчик для кнопки переключения
             toggleBtn.addEventListener('click', () => {
                 sidebar.classList.toggle('show');
-                mapElement.classList.toggle('sidebar-open');
                 toggleBtn.classList.toggle('sidebar-open');
+                zoomControl.classList.toggle('sidebar-open');
                 
                 // Изменяем иконку кнопки
                 if (sidebar.classList.contains('show')) {
-                    toggleBtn.innerHTML = '✕'; // Иконка закрытия
+                    toggleBtn.innerHTML = '✕';
                 } else {
-                    toggleBtn.innerHTML = '☰'; // Иконка меню
+                    toggleBtn.innerHTML = '☰';
                 }
             });
 
@@ -225,7 +232,9 @@
                     const selected = Array.from(checkboxes)
                         .filter(cb => cb.checked)
                         .map(cb => cb.value);
-                    updateFilteredShops(selected);
+                    if (typeof updateFilteredShops === 'function') {
+                        updateFilteredShops(selected);
+                    }
                 });
             });
 
