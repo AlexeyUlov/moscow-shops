@@ -1,103 +1,180 @@
-// Категории слоёв
-const layersByCategory = {
-    'ушли': L.layerGroup(),
-    'реселлеры': L.layerGroup(),
-    'бутики': L.layerGroup(),
-    'секонд': L.layerGroup()
-};
-
-// Иконки
-const parkIconClass = L.Icon.extend({
-    options: {
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, 0],
-    }
-});
-
-const parkIconArray = [
-    new parkIconClass({ iconUrl: './data/icons/blue.png' }),
-    new parkIconClass({ iconUrl: './data/icons/green.png' }),
-    new parkIconClass({ iconUrl: './data/icons/orange.png' }),
-    new parkIconClass({ iconUrl: './data/icons/red.png' })
-];
-
-// Хранилище всех маркеров для поиска
-const allMarkers = [];
-
-// Универсальный маркер
-function createMarker(lat, lon, title, popupHTML, icon, category) {
-    const marker = L.marker([lat, lon], { title, icon });
-
-    marker.on('click', () => {
-        const panel = document.getElementById('shop-info-panel');
-        const body = document.getElementById('shop-info-body');
-        panel.classList.add('show');
-        body.innerHTML = `<h3>${title}</h3>${popupHTML}`;
-    });
-
-    layersByCategory[category].addLayer(marker);
-    allMarkers.push({ title, lat, lon, popupHTML, marker });
-}
-
-// Показываем всё по умолчанию
-for (const group of Object.values(layersByCategory)) {
-    group.addTo(map);
-}
-
-// Функция фильтрации
-function updateFilteredShops(selectedCategories) {
-    for (const [cat, group] of Object.entries(layersByCategory)) {
-        if (selectedCategories.includes(cat)) {
-            map.addLayer(group);
-        } else {
-            map.removeLayer(group);
-        }
-    }
-}
-
-// Поиск по названию магазина
-const searchInput = document.getElementById('shop-search');
-const searchResults = document.getElementById('search-results');
-
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim().toLowerCase();
-    searchResults.innerHTML = '';
-
-    if (!query) {
-        searchResults.style.display = 'none';
-        return;
-    }
-
-    const matches = allMarkers.filter(m => m.title.toLowerCase().includes(query));
-
-    matches.forEach(m => {
-        const li = document.createElement('li');
-        li.textContent = m.title;
-        li.addEventListener('click', () => {
-            map.setView([m.lat, m.lon], 15);
-            m.marker.fire('click');
-            searchResults.style.display = 'none';
-            searchInput.value = '';
-        });
-        searchResults.appendChild(li);
-    });
-
-    searchResults.style.display = matches.length ? 'block' : 'none';
-});
-
-// Инициализация фильтров
 document.addEventListener('DOMContentLoaded', () => {
+    const map = L.map('map', {
+        attributionControl: false,
+        zoomControl: false,
+    }).setView([55.751244, 37.618423], 11);
+
+    L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        attribution: '',
+        maxZoom: 19,
+    }).addTo(map);
+
+    fetch('map.geojson')
+        .then(res => res.json())
+        .then(data => {
+            L.geoJSON(data, {
+                style: { color: 'red', weight: 3, opacity: 0.8 },
+            })
+                .addTo(map)
+                .bindPopup('МКАД');
+        })
+        .catch(err => console.error('Ошибка загрузки GeoJSON:', err));
+
+    // Категории слоёв
+    const layersByCategory = {
+        ушли: L.layerGroup(),
+        реселлеры: L.layerGroup(),
+        бутики: L.layerGroup(),
+        секонд: L.layerGroup(),
+    };
+
+    // Иконка-конструктор
+    const ParkIcon = L.Icon.extend({
+        options: {
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, 0],
+        },
+    });
+
+    const parkIconArray = [
+        new ParkIcon({ iconUrl: './data/icons/blue.png' }),
+        new ParkIcon({ iconUrl: './data/icons/green.png' }),
+        new ParkIcon({ iconUrl: './data/icons/orange.png' }),
+        new ParkIcon({ iconUrl: './data/icons/red.png' }),
+    ];
+
+    const allMarkers = [];
+
+    // Создаём маркер, добавляем его в нужный слой и хранилище
+    function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
+        // Сформируем полный HTML с адресом, брендами и контактами
+        const fullPopupHTML = `
+        <b>Адрес:</b> ${options.address || 'нет данных'}<br>
+        <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
+        <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
+        <div>${popupHTML}</div>
+    `;
+
+        const marker = L.marker([lat, lon], { title, icon });
+        marker.on('click', () => {
+            showShopInfo(title, fullPopupHTML);
+        });
+        layersByCategory[category].addLayer(marker);
+
+        allMarkers.push({
+            title,
+            titleLC: title.toLowerCase(),
+            lat,
+            lon,
+            popupHTML: fullPopupHTML,
+            marker,
+            address: options.address || '',
+            addressLC: (options.address || '').toLowerCase(),
+            brands: options.brands || '',
+            brandsLC: (options.brands || '').toLowerCase(),
+            contacts: options.contacts || '',
+            contactsLC: (options.contacts || '').toLowerCase(),
+        });
+    }
+
+
+    // Добавляем все категории на карту
+    Object.values(layersByCategory).forEach(group => group.addTo(map));
+
+    // Функция показа панели с информацией о магазине
+    const panel = document.getElementById('shop-info-panel');
+    const body = document.getElementById('shop-info-body');
+    const closeBtn = document.getElementById('close-info');
+
+    function showShopInfo(title, html) {
+        panel.classList.add('show');
+        body.innerHTML = `
+      <div class="p-2">
+        <h5 class="mb-2">${title}</h5>
+        <div>${html}</div>
+      </div>`;
+        document.getElementById('close-info-btn').addEventListener('click', () => {
+            panel.classList.remove('show');
+        });
+    }
+
+    // Закрытие панели при клике по кнопке
+    closeBtn.addEventListener('click', () => panel.classList.remove('show'));
+
+    // Обновление видимости слоёв по выбранным категориям
+    function updateFilteredShops(selectedCategories) {
+        Object.entries(layersByCategory).forEach(([cat, group]) => {
+            if (selectedCategories.includes(cat)) {
+                map.addLayer(group);
+            } else {
+                map.removeLayer(group);
+            }
+        });
+    }
+
+    // Поиск по магазинам
+    const searchInput = document.getElementById('shop-search');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        searchResults.innerHTML = '';
+
+        if (!query) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const matches = allMarkers.filter(m =>
+            m.titleLC.includes(query) ||
+            m.addressLC.includes(query) ||
+            m.brandsLC.includes(query)
+        );
+
+        matches.forEach(m => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item list-group-item-action';
+            li.textContent = m.title;
+            li.addEventListener('click', () => {
+                map.setView([m.lat, m.lon], 15);
+                m.marker.fire('click');
+                searchResults.style.display = 'none';
+                searchInput.value = '';
+            });
+            searchResults.appendChild(li);
+        });
+
+        searchResults.style.display = matches.length ? 'block' : 'none';
+    });
+
+    // Инициализация фильтров
     const checkboxes = document.querySelectorAll('.filter-check');
 
     function updateFilters() {
         const selected = Array.from(checkboxes)
             .filter(cb => cb.checked)
             .map(cb => cb.value);
-
         updateFilteredShops(selected);
     }
 
     checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
     updateFilters();
+
+    // ---- Добавляем маркеры из markersData ----
+    if (typeof markersData !== 'undefined' && Array.isArray(markersData)) {
+        markersData.forEach(data => {
+            createMarker(
+                data.lat,
+                data.lon,
+                data.title,
+                data.popupHTML,
+                parkIconArray[data.iconIndex],
+                data.category,
+                data.options
+            );
+        });
+    } else {
+        console.error('markersData не найден или не массив');
+    }
 });
