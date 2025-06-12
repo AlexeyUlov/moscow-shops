@@ -1,0 +1,154 @@
+ body {
+     margin: 0;
+     padding: 0;
+     font-family: Comic Sans MS, sans-serif;
+     overflow: hidden;
+ }
+
+ #container {
+     display: flex;
+     height: 100vh;
+     overflow: hidden;
+     position: relative;
+ }
+
+ #map {
+     flex: 1;
+     height: 100%;
+ }
+
+ h1,
+ h3 {
+     text-align: center;
+     padding: 10px;
+     margin: 0;
+ }
+
+ h1 {
+     background-color: #ffffff;
+     color: rgb(0, 0, 0);
+ }
+
+ .leaflet-control-attribution img {
+     vertical-align: middle;
+     height: 16px;
+     margin-right: 5px;
+ }
+
+ .leaflet-control-zoom {
+     position: fixed !important;
+     right: 10px;
+     top: 50%;
+     transform: translateY(-50%);
+     z-index: 1000;
+ }
+
+ #shop-info-panel {
+     left: -400px;
+     right: auto;
+     width: 400px;
+     max-width: 100%;
+     background: white;
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     z-index: 1001;
+     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+     transition: left 0.3s ease-in-out;
+     overflow-y: auto;
+ }
+
+ #shop-info-panel.show {
+     left: 0;
+ }
+
+
+ #shop-info-content {
+     padding: 20px;
+     font-family: Arial, sans-serif;
+     font-size: 14px;
+ }
+
+ #close-info {
+     float: right;
+     cursor: pointer;
+     font-size: 18px;
+     font-weight: bold;
+     margin-top: -10px;
+     margin-right: -10px;
+ }
+
+ #search-container {
+     position: fixed;
+     top: 10px;
+     left: 50%;
+     transform: translateX(-50%);
+     z-index: 1002;
+     width: 300px;
+ }
+
+ #shop-search {
+     width: 100%;
+     padding: 8px;
+     font-size: 14px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+ }
+
+ #search-results {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+     background: white;
+     border: 1px solid #ccc;
+     max-height: 200px;
+     overflow-y: auto;
+     display: none;
+     position: absolute;
+     width: 100%;
+     border-radius: 0 0 5px 5px;
+ }
+
+ #search-results li {
+     padding: 8px;
+     cursor: pointer;
+     border-bottom: 1px solid #eee;
+ }
+
+ #search-results li:hover {
+     background: #f0f0f0;
+ }
+
+ #filter-toggle-container {
+     position: fixed;
+     top: 10px;
+     right: 10px;
+     z-index: 1002;
+ }
+
+ #filter-toggle-btn {
+     padding: 8px 12px;
+     font-size: 14px;
+     border: none;
+     background-color: #333;
+     color: white;
+     border-radius: 4px;
+     cursor: pointer;
+ }
+
+ #filter-panel {
+     display: none;
+     position: absolute;
+     right: 0;
+     margin-top: 10px;
+     padding: 15px;
+     width: 250px;
+     background: white;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+ }
+
+ #filter-panel.active {
+     display: block;
+ }

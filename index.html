@@ -1,140 +1,31 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Снова в гонке</title>
-    <link rel="stylesheet" href="libs/dist/leaflet.css"/>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Comic Sans MS, sans-serif;
-            overflow: hidden;
-        }
-
-        #container {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        #sidebar {
-            width: 250px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-right: 1px solid #ccc;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            position: fixed;
-            left: -250px;
-            top: 0;
-            bottom: 0;
-            z-index: 1000;
-            transition: left 0.3s ease-in-out;
-        }
-
-        #sidebar.show {
-            left: 0;
-        }
-
-        #map {
-            flex: 1;
-            height: 100%;
-        }
-
-        h1, h3 {
-            text-align: center;
-            padding: 10px;
-            margin: 0;
-        }
-
-        h1 {
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-        }
-
-        .leaflet-control-attribution img {
-            vertical-align: middle;
-            height: 16px;
-            margin-right: 5px;
-        }
-
-        /* Кнопка для управления панелью */
-        .toggle-sidebar {
-            position: fixed;
-            left: 10px;
-            top: 10px;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-            transition: left 0.3s ease-in-out;
-        }
-
-        .toggle-sidebar.sidebar-open {
-            left: 260px;
-        }
-
-        /* Стили для кнопок масштаба */
-        .leaflet-control-zoom {
-            position: fixed;
-            left: 10px;
-            bottom: 20px;
-            z-index: 1000;
-            transition: left 0.3s ease-in-out;
-        }
-
-        .leaflet-control-zoom.sidebar-open {
-            left: 260px;
-        }
-
-        #shop-info-panel {
-            width: 400px;
-            max-width: 100%;
-            background: white;
-            position: absolute;
-            right: -400px;
-            top: 0;
-            bottom: 0;
-            z-index: 1001;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-            transition: right 0.3s ease-in-out;
-            overflow-y: auto;
-        }
-
-        #shop-info-panel.show {
-            right: 0;
-        }
-
-        #shop-info-content {
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        #close-info {
-            float: right;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: -10px;
-            margin-right: -10px;
-        }
-    </style>
+    <link rel="stylesheet" href="libs/dist/leaflet.css" />
+    <link rel="stylesheet" href="libs/style.css">
 </head>
 
 <body>
     <div id="container">
-        <div id="sidebar">
-            <h3>Фильтр магазинов</h3>
-            <label><input type="checkbox" class="filter-check" value="ушли" checked> Магазины, которые ушли</label><br>
-            <label><input type="checkbox" class="filter-check" value="реселлеры" checked> Реселлеры</label><br>
-            <label><input type="checkbox" class="filter-check" value="бутики" checked> Бутики</label><br>
-            <label><input type="checkbox" class="filter-check" value="секонд" checked> Секонд-хенды</label>
+        <div id="filter-toggle-container">
+            <button id="filter-toggle-btn">Фильтры</button>
+            <div id="filter-panel">
+                <h3>Фильтр магазинов</h3>
+                <label><input type="checkbox" class="filter-check" value="ушли" checked> Магазины, которые
+                    ушли</label><br>
+                <label><input type="checkbox" class="filter-check" value="реселлеры" checked> Реселлеры</label><br>
+                <label><input type="checkbox" class="filter-check" value="бутики" checked> Бутики</label><br>
+                <label><input type="checkbox" class="filter-check" value="секонд" checked> Секенд хенды</label>
+            </div>
+        </div>
+
+        <div id="search-container">
+            <input type="text" id="shop-search" placeholder="Поиск магазина..." autocomplete="off">
+            <ul id="search-results"></ul>
         </div>
 
         <div id="map"></div>
@@ -145,30 +36,24 @@
                 <div id="shop-info-body">Выберите магазин на карте</div>
             </div>
         </div>
-
-        <div class="toggle-sidebar">☰</div>
     </div>
 
-    <!-- Подключение JS Leaflet из локальной папки -->
     <script src="libs/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-yandex@1.0.1/dist/leaflet-yandex.js"></script>
 
     <script>
-        // Инициализация карты с центром в Москве
         const map = L.map('map', {
             attributionControl: false,
-            zoomControl: false // Отключаем стандартный zoomControl
+            zoomControl: false
         }).setView([55.751244, 37.618423], 11);
 
-        // Добавление слой без атрибуции
         L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             attribution: '',
             maxZoom: 19
         }).addTo(map);
 
-        // Добавление свою кастомную атрибуцию
         L.control.attribution({ prefix: false }).addTo(map);
-        
+
         document.addEventListener('DOMContentLoaded', () => {
             const closeBtn = document.getElementById('close-info');
             const panel = document.getElementById('shop-info-panel');
@@ -177,19 +62,8 @@
             });
         });
 
-        // Создаем кастомный zoomControl
-        const zoomControl = L.control.zoom({
-            position: 'bottomleft' // Это не влияет на наше позиционирование, так как мы переопределили стили
-        }).addTo(map);
+        const zoomControl = L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
-        // Перемещаем элемент zoomControl в нужное место
-        const zoomElement = document.querySelector('.leaflet-control-zoom');
-        zoomElement.style.position = 'fixed';
-        zoomElement.style.left = '10px';
-        zoomElement.style.bottom = '20px';
-        zoomElement.style.transition = 'left 0.3s ease-in-out';
-
-        // Граница Москвы 
         fetch('map.geojson')
             .then(response => response.json())
             .then(data => {
@@ -205,48 +79,25 @@
                 console.error('Ошибка загрузки GeoJSON:', error);
             });
 
-        // Анимация боковой панели
         document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.querySelector('.toggle-sidebar');
-            const zoomControl = document.querySelector('.leaflet-control-zoom');
-            
-            // Обработчик для кнопки переключения
+            const toggleBtn = document.getElementById('filter-toggle-btn');
+            const panel = document.getElementById('filter-panel');
             toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('show');
-                toggleBtn.classList.toggle('sidebar-open');
-                zoomControl.classList.toggle('sidebar-open');
-                
-                // Изменяем иконку кнопки
-                if (sidebar.classList.contains('show')) {
-                    toggleBtn.innerHTML = '✕';
-                } else {
-                    toggleBtn.innerHTML = '☰';
-                }
+                panel.classList.toggle('active');
             });
+        });
 
-            // Фильтрация магазинов
-            const checkboxes = document.querySelectorAll('.filter-check');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    const selected = Array.from(checkboxes)
-                        .filter(cb => cb.checked)
-                        .map(cb => cb.value);
-                    if (typeof updateFilteredShops === 'function') {
-                        updateFilteredShops(selected);
-                    }
-                });
-            });
-
-            // Инициализируем при загрузке
-            if (typeof updateFilteredShops === 'function') {
-                updateFilteredShops(['ушли', 'реселлеры', 'бутики', 'секонд']);
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('filter-panel');
+            const toggleBtn = document.getElementById('filter-toggle-btn');
+            if (!panel.contains(e.target) && !toggleBtn.contains(e.target)) {
+                panel.classList.remove('active');
             }
         });
     </script>
 
-    <!-- Кастомный файл js -->
     <script type="text/javascript" src="./libs/main.js"></script>
     <script type="text/javascript" src="./libs/markers.js"></script>
 </body>
+
 </html>
