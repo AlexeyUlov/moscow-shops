@@ -114,6 +114,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    function initSelectAllButton() {
+        const selectAllBtn = document.getElementById('selectAllFilters');
+        const checkboxes = document.querySelectorAll('.filter-check');
+
+        if (!selectAllBtn || !checkboxes.length) {
+            console.error('Элементы фильтра не найдены!');
+            return;
+        }
+
+        // Обновляет текст кнопки в зависимости от состояния чекбоксов
+        function updateButtonText() {
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
+        }
+
+        // Обработчик для кнопки
+        selectAllBtn.addEventListener('click', () => {
+            const isAnyUnchecked = Array.from(checkboxes).some(checkbox => !checkbox.checked);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = isAnyUnchecked;
+            });
+            updateButtonText();
+            updateFilters(); // Ваша существующая функция для обновления карты
+        });
+
+        // Обработчик для чекбоксов (если меняют вручную)
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                updateButtonText();
+            });
+        });
+
+        // Инициализация текста кнопки при загрузке
+        updateButtonText();
+    }
+
+    // Инициализируем кнопку
+    initSelectAllButton();
 
     // Поиск по магазинам
     const searchInput = document.getElementById('shop-search');
