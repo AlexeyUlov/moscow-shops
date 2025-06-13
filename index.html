@@ -31,6 +31,61 @@
             </button>
             <span class="filter-tooltip">Фильтры</span>
         </div>
+
+        <div class="info-container">
+            <button class="btn info-btn" id="toggleInfoModal">
+                <img src="./data/icons/information.png" alt="Информация" class="info-icon">
+            </button>
+            <span class="info-tooltip">Информация</span>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div class="info-modal" id="infoModal">
+        <div class="info-modal-content">
+            <span class="close-btn" id="closeInfoModal">&times;</span>
+            <h2>О проекте</h2>
+            <p>
+                <!-- Фото в углу -->
+                Наш сайт создан для того, чтобы помочь жителям Москвы ориентироваться в мире моды и шопинга в новых
+                реалиях.
+                После введения санкций и ухода с российского рынка многих популярных брендов, найти оригинальные товары
+                стало непросто.
+                Мы собрали информацию о магазинах, где можно купить продукцию таких марок, как <strong>Nike</strong>,
+                <strong>adidas</strong>, <strong>New Balance</strong>,
+                а также премиальных брендов — <strong>Balenciaga</strong>, <strong>Rick Owens</strong>, <strong>Maison
+                    Margiela</strong> и других.
+            </p>
+            <p>
+                На нашей карте отмечены:
+                <img src="./data/icons/babka.jpg" alt="Мы с бабушкой" class="info-photo">
+            </p>
+            <ul>
+                <li>магазины с новым брендингом, которые раньше представляли известные зарубежные марки;</li>
+                <li>реселлеры, привозящие одежду и обувь из-за границы по разумным ценам;</li>
+                <li>бутики с премиальными брендами;</li>
+                <li>качественные секонд-хенды.</li>
+            </ul>
+            <p>
+                Мы хотим, чтобы вы могли быстро найти нужный магазин, узнать его адрес, ассортимент и сделать удачную
+                покупку.
+            </p>
+
+            <div class="contact-section mt-3">
+                <h5>Связаться с нами</h5>
+                <div class="d-flex gap-2">
+                    <button class="contact-btn" id="emailButton">
+                        <img src="./data/icons/email.png" alt="Почта" class="contact-icon">
+                    </button>
+                    <button class="contact-btn" id="vkButton">
+                        <img src="./data/icons/vk.png" alt="VK" class="contact-icon">
+                    </button>
+                    <button class="contact-btn" id="telegramButton">
+                        <img src="./data/icons/telegram.png" alt="Telegram" class="contact-icon">
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Панель фильтров -->

@@ -176,4 +176,36 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('markersData не найден или не массив');
     }
+
+    // === Логика для кнопки информации и модального окна ===
+    const infoModal = document.getElementById('infoModal');
+    const toggleInfoBtn = document.getElementById('toggleInfoModal');
+    const closeInfoBtn = document.getElementById('closeInfoModal');
+
+    toggleInfoBtn.addEventListener('click', () => {
+        infoModal.style.display = 'block';
+    });
+
+    closeInfoBtn.addEventListener('click', () => {
+        infoModal.style.display = 'none';
+    });
+
+    // Чтобы закрывать модалку по клику вне окна (по желанию)
+    window.addEventListener('click', (e) => {
+        if (e.target === infoModal) {
+            infoModal.style.display = 'none';
+        }
+    });
+
+    document.getElementById('emailButton').addEventListener('click', () => {
+        window.location.href = 'mailto:alexey.ulov@mail.ru';
+    });
+
+    document.getElementById('vkButton').addEventListener('click', () => {
+        window.open('https://vk.com/petergriffinfunnymoments', '_blank');
+    });
+
+    document.getElementById('telegramButton').addEventListener('click', () => {
+        window.open('https://t.me/petergriffinfunnymoments', '_blank');
+    });
 });
