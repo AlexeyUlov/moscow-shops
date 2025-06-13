@@ -25,9 +25,13 @@
 
     <!-- Кнопка фильтра -->
     <div class="position-fixed top-0 end-0 p-3 z-3">
-        <button class="btn btn-dark" id="toggleFilterPanel">Фильтры</button>
+        <div class="filter-container">
+            <button class="btn filter-btn" id="toggleFilterPanel">
+                <img src="./data/icons/filters.png" alt="Фильтр" class="filter-icon">
+            </button>
+            <span class="filter-tooltip">Фильтры</span>
+        </div>
     </div>
-
 
     <!-- Панель фильтров -->
     <div id="filterPanel" class="filter-panel bg-white border p-3 shadow rounded position-fixed z-3"
@@ -74,7 +78,7 @@
     <!-- Поиск -->
     <div id="shop-search-container">
         <div class="input-group">
-            <input type="text" id="shop-search" class="form-control" placeholder="Поиск магазина..." />
+            <input type="text" id="shop-search" class="form-control" placeholder="Поиск" />
         </div>
         <ul id="search-results" class="list-group mt-1"></ul>
     </div>

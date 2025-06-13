@@ -84,7 +84,7 @@ body {
     border: 1px solid #ced4da;
     border-top: none;
     border-radius: 0 0 5px 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     display: none;
 }
 
@@ -96,4 +96,92 @@ body {
 
 #search-results li:hover {
     background-color: #f8f9fa;
+}
+
+/* Центрирование zoom-контролов по правому краю */
+.leaflet-control-zoom {
+    position: fixed !important;
+    top: 50% !important;
+    right: 20px !important;
+    transform: translateY(-50%) !important;
+    z-index: 1001 !important;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.leaflet-control-zoom a {
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 1.4rem !important;
+    text-align: center;
+    background-color: white;
+    border: none;
+    border-radius: 0 !important;
+    /* Убираем индивидуальные закругления */
+    display: block;
+}
+
+/*эффект при наведении */
+.leaflet-control-zoom a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Кнопка фильтров */
+.filter-btn {
+    position: fixed;
+    /* фиксированная позиция, как у zoom */
+    right: 20px;
+    /* точно такой же отступ по X */
+    background-color: white !important;
+    border: none !important;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.filter-btn:hover {
+    background-color: #f0f0f0 !important;
+}
+
+.filter-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.filter-container {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    /* или своё значение, чтобы совпадало с кнопкой */
+}
+
+.filter-tooltip {
+    position: absolute;
+    bottom: -80px;
+    right: 50%;
+    transform: translateX(9px) translateY(10px);
+    /* изначально немного ниже */
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.filter-container:hover .filter-tooltip {
+    opacity: 1;
+    transform: translateX(9px) translateY(0);
+    /* поднимается ровно под кнопку */
+    pointer-events: auto;
 }

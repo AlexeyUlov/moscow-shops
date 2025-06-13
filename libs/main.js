@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const map = L.map('map', {
         attributionControl: false,
-        zoomControl: false,
+        zoomControl: true,
     }).setView([55.751244, 37.618423], 11);
 
     L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -38,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const parkIconArray = [
-        new ParkIcon({ iconUrl: './data/icons/blue.png' }),
-        new ParkIcon({ iconUrl: './data/icons/green.png' }),
-        new ParkIcon({ iconUrl: './data/icons/orange.png' }),
-        new ParkIcon({ iconUrl: './data/icons/red.png' }),
+        new ParkIcon({ iconUrl: './data/markers/blue.png' }),
+        new ParkIcon({ iconUrl: './data/markers/green.png' }),
+        new ParkIcon({ iconUrl: './data/markers/orange.png' }),
+        new ParkIcon({ iconUrl: './data/markers/red.png' }),
     ];
 
     const allMarkers = [];
@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             contactsLC: (options.contacts || '').toLowerCase(),
         });
     }
-
 
     // Добавляем все категории на карту
     Object.values(layersByCategory).forEach(group => group.addTo(map));
