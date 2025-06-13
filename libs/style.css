@@ -223,10 +223,8 @@ body {
 .info-tooltip {
     position: absolute;
     top: 100%;
-    /* сразу под кнопкой */
     left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    /* центрируем и чуть ниже */
+    transform: translateX(-50%) translateY(10px);
     background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 4px 8px;
@@ -236,6 +234,11 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.info-tooltip.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(20px);
 }
 
 .info-container:hover .info-tooltip {

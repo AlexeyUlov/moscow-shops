@@ -201,9 +201,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('emailButton').addEventListener('click', () => {
-        window.location.href = 'mailto:alexey.ulov@mail.ru';
-    });
+    document.getElementById('emailButton').addEventListener('click', async () => {
+    const email = 'alexey.ulov@mail.ru';
+    const tooltip = document.getElementById('emailTooltip');
+    
+    try {
+        // Копируем email в буфер обмена
+        await navigator.clipboard.writeText(email);
+        
+        // Показываем уведомление
+        tooltip.classList.add('show');
+        
+        // Скрываем уведомление через 2 секунды
+        setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 2000);
+        
+    } catch (err) {
+        // Если не удалось скопировать, открываем почтовый клиент
+        console.error('Ошибка копирования: ', err);
+        window.location.href = `mailto:${email}`;
+    }
+});
 
     document.getElementById('vkButton').addEventListener('click', () => {
         window.open('https://vk.com/petergriffinfunnymoments', '_blank');
