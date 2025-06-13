@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Создаём маркер, добавляем его в нужный слой и хранилище
     function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
+        const title_new = options.title_new || title;
         // Сформируем полный HTML с адресом, брендами и контактами
         const fullPopupHTML = `
         <b>Адрес:</b> ${options.address || 'нет данных'}<br>
@@ -64,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         allMarkers.push({
             title,
+            title_new, // Добавляем новый атрибут с тем же значением
             titleLC: title.toLowerCase(),
+            title_newLC: title_new.toLowerCase(), // Добавляем lowercase версию нового атрибута
             lat,
             lon,
             popupHTML: fullPopupHTML,
@@ -127,25 +130,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const matches = allMarkers.filter(m =>
             m.titleLC.includes(query) ||
+            m.title_newLC.includes(query) || // Добавляем поиск по новому атрибуту
             m.addressLC.includes(query) ||
             m.brandsLC.includes(query)
         );
 
         matches.forEach(m => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item list-group-item-action';
-            li.textContent = m.title;
-            li.addEventListener('click', () => {
-                map.setView([m.lat, m.lon], 15);
-                m.marker.fire('click');
-                searchResults.style.display = 'none';
-                searchInput.value = '';
-            });
-            searchResults.appendChild(li);
+        const li = document.createElement('li');
+        li.className = 'list-group-item list-group-item-action';
+        li.textContent = m.title_new || m.title; // Показываем новое название, если есть
+        li.addEventListener('click', () => {
+            map.setView([m.lat, m.lon], 15);
+            m.marker.fire('click');
+            searchResults.style.display = 'none';
+            searchInput.value = '';
         });
-
-        searchResults.style.display = matches.length ? 'block' : 'none';
+        searchResults.appendChild(li);
     });
+
+    searchResults.style.display = matches.length ? 'block' : 'none';
+});
 
     // Инициализация фильтров
     const checkboxes = document.querySelectorAll('.filter-check');

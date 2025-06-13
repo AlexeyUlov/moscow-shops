@@ -8,6 +8,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'Jns',
             address: 'Москва, ул. Земляной Вал, д. 33',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
@@ -21,6 +22,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'MAAG',
             address: 'Москва, Щелковское ш., д. 75',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
@@ -34,6 +36,7 @@ const markersData = [
     iconIndex: 0,
     category: 'ушли',
     options: {
+        title_new: 'Ecru',
         address: 'Москва, Манежная площадь, 1, стр. 2',
         brands: 'Bershka',
         contacts: '+7 (499) 957-88-38, ecrubrand.com'
@@ -47,6 +50,7 @@ const markersData = [
     iconIndex: 0,
     category: 'ушли',
     options: {
+        title_new: 'DUB',
         address: 'Москва, Автозаводская ул., 18',
         brands: 'Pull & Bear',
         contacts: '+7 (499) 957-88-19, dubapparels.com'
@@ -61,6 +65,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'MAAG',
             address: 'Москва, ул. Земляной Вал, д. 33',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
@@ -74,6 +79,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'MAAG',
             address: 'Москва, Манежная площадь, 1, стр. 2',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
@@ -87,6 +93,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'MAAG',
             address: 'Москва, Неглинная ул., 10',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
@@ -100,6 +107,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'Ecru',
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Bershka',
             contacts: '+7 (499) 957-88-38, ecrubrand.com'
@@ -113,6 +121,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'Ecru',
             address: 'Москва, Автозаводская ул., 18',
             brands: 'Bershka',
             contacts: '+7 (499) 957-88-38, ecrubrand.com'
@@ -126,6 +135,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'DUB',
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Pull & Bear',
             contacts: '+7 (499) 957-88-19, dubapparels.com'
@@ -139,6 +149,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'DUB',
             address: 'Москва, Ходынский бул., 4',
             brands: 'Pull & Bear',
             contacts: '+7 (499) 957-88-19, dubapparels.com'
@@ -152,6 +163,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'Jns',
             address: 'Москва, Ходынский бул., 4',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
@@ -165,6 +177,7 @@ const markersData = [
         iconIndex: 0,
         category: 'ушли',
         options: {
+            title_new: 'Jns',
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
