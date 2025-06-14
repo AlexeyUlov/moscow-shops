@@ -239,6 +239,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Управление боковой панелью
+const sidebar = document.getElementById('sidebar');
+const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+
+sidebarToggleBtn.addEventListener('click', () => {
+    sidebar.classList.add('show');
+});
+
+sidebarCloseBtn.addEventListener('click', () => {
+    sidebar.classList.remove('show');
+});
+
+// Закрытие панели при клике вне ее
+document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && e.target !== sidebarToggleBtn) {
+        sidebar.classList.remove('show');
+    }
+});
+
+// Фильтрация по категориям
+const categoryButtons = document.querySelectorAll('.sidebar-category');
+categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const category = button.dataset.category;
+        // Здесь должна быть логика фильтрации магазинов
+    });
+});
+
     document.getElementById('emailButton').addEventListener('click', async () => {
     const email = 'alexey.ulov@mail.ru';
     const tooltip = document.getElementById('emailTooltip');

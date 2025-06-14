@@ -25,13 +25,6 @@
 
     <!-- Кнопка фильтра -->
     <div class="position-fixed top-0 end-0 p-3 z-3">
-        <div class="filter-container">
-            <button class="btn filter-btn" id="toggleFilterPanel">
-                <img src="./data/icons/filters.png" alt="Фильтр" class="filter-icon">
-            </button>
-            <span class="filter-tooltip">Фильтры</span>
-        </div>
-
         <div class="info-container">
             <button class="btn info-btn" id="toggleInfoModal">
                 <img src="./data/icons/information.png" alt="Информация" class="info-icon">
@@ -91,34 +84,57 @@
         </div>
     </div>
 
-    <!-- Панель фильтров -->
-    <div id="filterPanel" class="filter-panel bg-white border p-3 shadow rounded position-fixed z-3"
-     style="top: 70px; right: 20px; width: 280px; display: none;">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Фильтр магазинов</h5>
-        <button type="button" class="btn-close" id="closeFilterPanel"></button>
+<!-- Боковая панель как в Яндекс.Картах -->
+<!-- Боковая панель (sidebar) -->
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-title">Фильтры магазинов</div>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4L4 12M4 4L12 12" stroke="#2C2D2E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </button>
     </div>
-    <div>
-        <div class="form-check">
-            <input class="form-check-input filter-check" type="checkbox" value="ушли" id="filter1" checked />
-            <label class="form-check-label" for="filter1">Магазины, которые ушли</label>
+    <div class="sidebar-content">
+        <!-- Поисковая строка -->
+        <div id="shop-search-container">
+            <div class="input-group">
+                <input type="text" id="shop-search" class="form-control" placeholder="Поиск магазинов" />
+            </div>
+            <ul id="search-results" class="list-group mt-1"></ul>
         </div>
-        <div class="form-check">
-            <input class="form-check-input filter-check" type="checkbox" value="реселлеры" id="filter2" checked />
-            <label class="form-check-label" for="filter2">Реселлеры</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input filter-check" type="checkbox" value="бутики" id="filter3" checked />
-            <label class="form-check-label" for="filter3">Бутики</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input filter-check" type="checkbox" value="секонд" id="filter4" checked />
-            <label class="form-check-label" for="filter4">Секонд хенды</label>
+
+        <!-- Перенесенные фильтры -->
+        <div class="sidebar-filters">
+            <div class="filter-group">
+                <div class="form-check">
+                    <input class="form-check-input filter-check" type="checkbox" value="ушли" id="filter1" checked />
+                    <label class="form-check-label" for="filter1">Магазины, которые ушли</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input filter-check" type="checkbox" value="реселлеры" id="filter2" checked />
+                    <label class="form-check-label" for="filter2">Реселлеры</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input filter-check" type="checkbox" value="бутики" id="filter3" checked />
+                    <label class="form-check-label" for="filter3">Бутики</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input filter-check" type="checkbox" value="секонд" id="filter4" checked />
+                    <label class="form-check-label" for="filter4">Секонд-хенды</label>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary w-100 mt-2" id="selectAllFilters">Снять все</button>
         </div>
     </div>
-    <button type="button" class="btn btn-outline-primary mt-3 w-100" id="selectAllFilters">Снять все</button>
 </div>
 
+<!-- Кнопка открытия боковой панели -->
+<button id="sidebarToggleBtn" class="sidebar-toggle-btn">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 6H20M4 12H20M4 18H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</button>
 
     <!-- Открытие панели -->
     <script>
@@ -134,14 +150,6 @@
             filterPanel.style.display = 'none';
         });
     </script>
-
-    <!-- Поиск -->
-    <div id="shop-search-container">
-        <div class="input-group">
-            <input type="text" id="shop-search" class="form-control" placeholder="Поиск" />
-        </div>
-        <ul id="search-results" class="list-group mt-1"></ul>
-    </div>
 
     <!-- Карта -->
     <div id="map"></div>
