@@ -47,21 +47,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const allMarkers = [];
 
     // Создаём маркер, добавляем его в нужный слой и хранилище
-    function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
-        const title_new = options.title_new || title;
-        // Сформируем полный HTML с адресом, брендами и контактами
-        const fullPopupHTML = `
+function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
+    const title_new = options.title_new || title;
+    const fullPopupHTML = `
         <b>Адрес:</b> ${options.address || 'нет данных'}<br>
         <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
         <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
         <div>${popupHTML}</div>
     `;
 
-        const marker = L.marker([lat, lon], { title, icon });
-        marker.on('click', () => {
-    showShopInfo(title, fullPopupHTML);
-    // Прокручиваем сайдбар к информации о магазине
-    document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth' });
+    const marker = L.marker([lat, lon], { title, icon });
+    
+marker.on('click', function(e) {
+    // Открываем сайдбар
+    const sidebar = document.getElementById('sidebar');
+    if (!sidebar) {
+        console.error('Элемент с ID "sidebar" не найден!');
+        return;
+    }
+    
+    // Добавляем классы для отображения
+    sidebar.classList.add('show');
+    sidebar.style.transform = 'translateX(0)';
+    
+    // Обновляем информацию в сайдбаре
+    document.getElementById('shopInfoTitle').textContent = title_new || title;
+    document.getElementById('shopInfoContent').innerHTML = fullPopupHTML;
+    
+    // Прокручиваем к информации
+    setTimeout(() => {
+        document.getElementById('sidebarShopInfo').scrollIntoView({
+            behavior: 'smooth',
+            block: 'end'
+        });
+    }, 100);
+    
+    // Центрируем карту
+    map.setView(e.latlng, map.getZoom());
 });
         layersByCategory[category].addLayer(marker);
 
@@ -248,23 +270,50 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Управление боковой панелью
+// Управление боковой панелью
+// Управление боковой панелью
+// Управление боковой панелью
 const sidebar = document.getElementById('sidebar');
 const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
 const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 
-sidebarToggleBtn.addEventListener('click', () => {
+function openSidebar() {
     sidebar.classList.add('show');
-});
+    sidebar.style.transform = 'translateX(0)';
+}
 
-sidebarCloseBtn.addEventListener('click', () => {
+function closeSidebar() {
     sidebar.classList.remove('show');
+    sidebar.style.transform = 'translateX(-100%)';
+}
+
+// Обработчики событий
+sidebarToggleBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (sidebar.classList.contains('show')) {
+        closeSidebar();
+    } else {
+        openSidebar();
+    }
 });
 
-// Закрытие панели при клике вне ее
-document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && e.target !== sidebarToggleBtn) {
-        sidebar.classList.remove('show');
+sidebarCloseBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeSidebar();
+});
+
+// Закрытие при клике вне панели
+document.addEventListener('click', function(e) {
+    if (!sidebar.contains(e.target) && 
+        e.target !== sidebarToggleBtn && 
+        !e.target.closest('.leaflet-marker-icon')) {
+        closeSidebar();
     }
+});
+
+// Предотвращаем закрытие при клике внутри панели
+sidebar.addEventListener('click', function(e) {
+    e.stopPropagation();
 });
 
 // Фильтрация по категориям
