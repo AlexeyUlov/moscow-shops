@@ -59,8 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const marker = L.marker([lat, lon], { title, icon });
         marker.on('click', () => {
-            showShopInfo(title, fullPopupHTML);
-        });
+    showShopInfo(title, fullPopupHTML);
+    // Прокручиваем сайдбар к информации о магазине
+    document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth' });
+});
         layersByCategory[category].addLayer(marker);
 
         allMarkers.push({
@@ -90,16 +92,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('close-info');
 
     function showShopInfo(title, html) {
-        panel.classList.add('show');
-        body.innerHTML = `
+    // Обновляем панель в сайдбаре
+    document.getElementById('shopInfoTitle').textContent = title;
+    document.getElementById('shopInfoContent').innerHTML = html;
+    
+    // Показываем сайдбар, если он скрыт
+    document.getElementById('sidebar').classList.add('show');
+    
+    // Также оставляем возможность показать панель на карте (по желанию)
+    panel.classList.add('show');
+    body.innerHTML = `
       <div class="p-2">
         <h5 class="mb-2">${title}</h5>
         <div>${html}</div>
       </div>`;
-        document.getElementById('close-info-btn').addEventListener('click', () => {
-            panel.classList.remove('show');
-        });
-    }
+}
 
     // Закрытие панели при клике по кнопке
     closeBtn.addEventListener('click', () => panel.classList.remove('show'));
@@ -178,11 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
         li.className = 'list-group-item list-group-item-action';
         li.textContent = m.title_new || m.title; // Показываем новое название, если есть
         li.addEventListener('click', () => {
-            map.setView([m.lat, m.lon], 15);
-            m.marker.fire('click');
-            searchResults.style.display = 'none';
-            searchInput.value = '';
-        });
+    map.setView([m.lat, m.lon], 15);
+    showShopInfo(m.title_new || m.title, m.popupHTML);
+    searchResults.style.display = 'none';
+    searchInput.value = '';
+    document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth' });
+});
         searchResults.appendChild(li);
     });
 

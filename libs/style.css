@@ -616,3 +616,32 @@ body {
     background: #3366FF;
     color: white;
 }
+/* Добавьте в конец файла CSS */
+.sidebar-shop-info {
+    padding: 16px 20px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: auto; /* Чтобы прижималось к низу */
+    flex-shrink: 0;
+}
+
+.shop-info-header h5 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2C2D2E;
+}
+
+.shop-info-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.shop-info-content p {
+    margin: 0 0 8px 0;
+}
+
+.shop-info-content b {
+    font-weight: 600;
+    color: #2C2D2E;
+}
