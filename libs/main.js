@@ -357,4 +357,120 @@ categoryButtons.forEach(button => {
     document.getElementById('telegramButton').addEventListener('click', () => {
         window.open('https://t.me/petergriffinfunnymoments', '_blank');
     });
+
+    // Обработчики для модального окна авторизации
+const authModal = document.getElementById('authModal');
+const authButton = document.getElementById('authButton');
+const closeAuthModal = document.getElementById('closeAuthModal');
+
+// Открытие модального окна
+authButton.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+});
+
+// Закрытие модального окна
+closeAuthModal.addEventListener('click', () => {
+    authModal.style.display = 'none';
+});
+
+// Закрытие при клике вне окна
+window.addEventListener('click', (e) => {
+    if (e.target === authModal) {
+        authModal.style.display = 'none';
+    }
+});
+
+// Обработка формы входа
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Здесь должна быть логика авторизации
+    console.log('Вход:', { username, password });
+    authModal.style.display = 'none';
+});
+
+// Обработка формы регистрации
+document.getElementById('registerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('regUsername').value;
+    const password = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        return;
+    }
+    
+    // Здесь должна быть логика регистрации
+    console.log('Регистрация:', { username, password });
+    
+    // Переключаем на вкладку входа после регистрации
+    document.getElementById('login-tab').click();
+    authModal.style.display = 'none';
+});
+
+// Управление панелью фильтров
+const filterPanel = document.getElementById('filterPanel');
+const toggleFilterBtn = document.getElementById('toggleFilterPanel');
+const closeFilterBtn = document.getElementById('closeFilterPanel');
+
+function toggleFilterPanel() {
+    filterPanel.classList.toggle('show');
+}
+
+toggleFilterBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleFilterPanel();
+});
+
+closeFilterBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleFilterPanel();
+});
+
+// Закрытие при клике вне панели
+document.addEventListener('click', function(e) {
+    if (!filterPanel.contains(e.target) && e.target !== toggleFilterBtn) {
+        filterPanel.classList.remove('show');
+    }
+});
+
+// Предотвращаем закрытие при клике внутри панели
+filterPanel.addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+// Инициализация кнопки "Снять все"
+function initSelectAllButton() {
+    const selectAllBtn = document.getElementById('selectAllFilters');
+    const checkboxes = document.querySelectorAll('.filter-check');
+
+    if (!selectAllBtn || !checkboxes.length) return;
+
+    function updateButtonText() {
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+        selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
+    }
+
+    selectAllBtn.addEventListener('click', () => {
+        const isAnyUnchecked = Array.from(checkboxes).some(checkbox => !checkbox.checked);
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isAnyUnchecked;
+        });
+        updateButtonText();
+        updateFilters();
+    });
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            updateButtonText();
+        });
+    });
+
+    updateButtonText();
+}
+
+initSelectAllButton();
+
 });
