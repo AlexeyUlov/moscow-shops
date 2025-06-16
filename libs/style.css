@@ -211,7 +211,7 @@ body {
     background: white;
     padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     z-index: 1050;
     max-width: 800px;
     width: 85%;
@@ -429,15 +429,31 @@ body {
 
 /* === АДАПТАЦИЯ === */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        max-width: 320px;
-    }
 
+    /* Универсальное уменьшение размеров кнопок */
+    .filter-btn,
+    .info-btn,
+    .contact-btn,
     .sidebar-toggle-btn {
-        left: 10px;
-        top: 10px;
         width: 40px;
         height: 40px;
+        border-radius: 8px;
+    }
+
+    /* Уменьшение размеров иконок внутри кнопок */
+    .filter-icon,
+    .info-icon,
+    .contact-icon,
+    .sidebar-toggle-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Zoom-кнопки Leaflet */
+    .leaflet-control-zoom a {
+        width: 40px !important;
+        height: 40px !important;
+        line-height: 40px !important;
+        font-size: 1.2rem !important;
     }
 }

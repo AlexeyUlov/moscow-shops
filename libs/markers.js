@@ -12,7 +12,8 @@ const markersData = [
             address: 'Москва, ул. Земляной Вал, д. 33',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.8110579,
@@ -26,36 +27,39 @@ const markersData = [
             address: 'Москва, Щелковское ш., д. 75',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
-        }
+        },
+        okrug: 'ВО'
     },
     {
-    lat: 55.7554841,
-    lon: 37.6143306,
-    title: 'Bershka',
-    popupHTML: '<img src="data/logos/ecru_logo.png" width="100px">',
-    iconIndex: 0,
-    category: 'ушли',
-    options: {
-        title_new: 'Ecru',
-        address: 'Москва, Манежная площадь, 1, стр. 2',
-        brands: 'Bershka',
-        contacts: '+7 (499) 957-88-38, ecrubrand.com'
-    }
-},
-{
-    lat: 55.7051843,
-    lon: 37.6407266,
-    title: 'Pull & Bear',
-    popupHTML: '<img src="data/logos/dub_logo.png" width="100px">',
-    iconIndex: 0,
-    category: 'ушли',
-    options: {
-        title_new: 'DUB',
-        address: 'Москва, Автозаводская ул., 18',
-        brands: 'Pull & Bear',
-        contacts: '+7 (499) 957-88-19, dubapparels.com'
-    }
-},
+        lat: 55.7554841,
+        lon: 37.6143306,
+        title: 'Bershka',
+        popupHTML: '<img src="data/logos/ecru_logo.png" width="100px">',
+        iconIndex: 0,
+        category: 'ушли',
+        options: {
+            title_new: 'Ecru',
+            address: 'Москва, Манежная площадь, 1, стр. 2',
+            brands: 'Bershka',
+            contacts: '+7 (499) 957-88-38, ecrubrand.com'
+        },
+        okrug: 'ЦО'
+    },
+    {
+        lat: 55.7051843,
+        lon: 37.6407266,
+        title: 'Pull & Bear',
+        popupHTML: '<img src="data/logos/dub_logo.png" width="100px">',
+        iconIndex: 0,
+        category: 'ушли',
+        options: {
+            title_new: 'DUB',
+            address: 'Москва, Автозаводская ул., 18',
+            brands: 'Pull & Bear',
+            contacts: '+7 (499) 957-88-19, dubapparels.com'
+        },
+        okrug: 'ЦО'
+    },
 
     {
         lat: 55.7051843,
@@ -69,7 +73,8 @@ const markersData = [
             address: 'Москва, ул. Земляной Вал, д. 33',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7554841,
@@ -83,7 +88,8 @@ const markersData = [
             address: 'Москва, Манежная площадь, 1, стр. 2',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7619798,
@@ -97,7 +103,8 @@ const markersData = [
             address: 'Москва, Неглинная ул., 10',
             brands: 'Zara',
             contacts: '8 (800) 600-89-87, maag-fashion.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7440113,
@@ -111,7 +118,8 @@ const markersData = [
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Bershka',
             contacts: '+7 (499) 957-88-38, ecrubrand.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7051843,
@@ -125,7 +133,8 @@ const markersData = [
             address: 'Москва, Автозаводская ул., 18',
             brands: 'Bershka',
             contacts: '+7 (499) 957-88-38, ecrubrand.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7440113,
@@ -139,7 +148,8 @@ const markersData = [
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Pull & Bear',
             contacts: '+7 (499) 957-88-19, dubapparels.com'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.7903887,
@@ -153,7 +163,8 @@ const markersData = [
             address: 'Москва, Ходынский бул., 4',
             brands: 'Pull & Bear',
             contacts: '+7 (499) 957-88-19, dubapparels.com'
-        }
+        },
+        okrug: 'ЗО'
     },
     {
         lat: 55.7903887,
@@ -167,7 +178,8 @@ const markersData = [
             address: 'Москва, Ходынский бул., 4',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
-        }
+        },
+        okrug: 'ЗО'
     },
     {
         lat: 55.7440113,
@@ -181,7 +193,8 @@ const markersData = [
             address: 'Москва, Площадь Киевского вокзала, 2',
             brands: 'Levis, Nike, Adidas',
             contacts: '+7(495) 127-78-95, jnsonline.ru'
-        }
+        },
+        okrug: 'ЦО'
     },
     // реселлеры
     {
@@ -196,7 +209,8 @@ const markersData = [
             brands: 'Balenciaga, Rick Owens, Maison Margiela',
             contacts: '-',
             workingHours: 'Ежедневно, 12:00 - 21:00'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.756683,
@@ -210,7 +224,8 @@ const markersData = [
             brands: 'Balenciaga, Rick Owens',
             contacts: '+7 (977) 197-90-21, https://t.me/CABstoree',
             workingHours: 'Ежедневно, 11:00 - 22:00'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.761976,
@@ -224,7 +239,8 @@ const markersData = [
             brands: 'Jean Paul Gaultier, Maison Margiela, Maison MIHARA YASUHIRO',
             contacts: '-',
             workingHours: 'Ежедневно, 11:00 - 23:00'
-        }
+        },
+        okrug: "ЦО"
     },
     {
         lat: 55.761976,
@@ -238,7 +254,8 @@ const markersData = [
             brands: 'Balenciaga, Burberry, Dior',
             contacts: '8 (800) 333-88-39, wayoff.ru, https://vk.com/wayoff',
             workingHours: 'Ежедневно, 10:00 - 22:00'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.784959,
@@ -252,7 +269,8 @@ const markersData = [
             brands: 'Maison Margiela, Balenciaga, Burberry',
             contacts: '+7 (499) 394-63-35, www.anothershop.net, https://t.me/anothershop, https://vk.com/anothershop',
             workingHours: 'Ежедневно, 13:00 - 21:00'
-        }
+        },
+        okrug: 'ЦО'
     },
     {
         lat: 55.835683,
@@ -266,7 +284,8 @@ const markersData = [
             brands: 'Nike, The North Face, New Balance',
             contacts: '-',
             workingHours: 'Ежедневно, 13:00 - 22:00'
-        }
+        },
+        okrug: 'ВО'
     },
 
     // бутики
@@ -282,7 +301,8 @@ const markersData = [
             brands: 'Balenciaga, Diesel, Maison Margiela',
             contacts: '-',
             workingHours: 'Ежедневно, 11:00 - 22:00'
-        }
+        },
+        okrug: 'ЦО'
     },
 
     // секонд-хенды
@@ -298,6 +318,7 @@ const markersData = [
             brands: 'Balenciaga, Fendi, Maison Margiela',
             contacts: '8 (800) 777-61-49, secondfriendstore.ru',
             workingHours: 'Ежедневно, 11:00 - 21:00'
-        }
+        },
+        okrug: 'ЦО'
     }
 ];

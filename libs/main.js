@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const allMarkers = [];
 
     // === СОЗДАНИЕ МАРКЕРОВ ===
-    function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
+    function createMarker(lat, lon, title, popupHTML, icon, category, options = {}, okrug) {
         const title_new = options.title_new || title;
         const fullPopupHTML = `
-            <b>Адрес:</b> ${options.address || 'нет данных'}<br>
-            <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
-            <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
-            <div>${popupHTML}</div>
-        `;
+        <b>Адрес:</b> ${options.address || 'нет данных'}<br>
+        <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
+        <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
+        <div>${popupHTML}</div>
+    `;
         const marker = L.marker([lat, lon], { title, icon });
 
         marker.on('click', e => {
@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             brandsLC: (options.brands || '').toLowerCase(),
             contacts: options.contacts || '',
             contactsLC: (options.contacts || '').toLowerCase(),
+            okrug // <=== Добавляем округ
         });
     }
 
@@ -95,7 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.popupHTML,
                 parkIconArray[data.iconIndex],
                 data.category,
-                data.options
+                data.options,
+                data.okrug
             );
         });
     } else {
@@ -270,4 +272,37 @@ document.addEventListener('DOMContentLoaded', () => {
         filterPanel.style.display = 'none';
     });
 
+
+    let okrugBorderLayer = null;
+
+    document.querySelectorAll('.okrug-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const okrug = btn.dataset.okrug;
+
+            // Скрываем маркеры вне округа
+            allMarkers.forEach(m => {
+                if (m.okrug === okrug) {
+                    map.addLayer(m.marker);
+                } else {
+                    map.removeLayer(m.marker);
+                }
+            });
+
+            // Убираем старую границу
+            if (okrugBorderLayer) {
+                map.removeLayer(okrugBorderLayer);
+            }
+
+            // Загружаем границу округа
+            fetch(`./data/borders/${okrug}.geojson`)
+                .then(res => res.json())
+                .then(data => {
+                    okrugBorderLayer = L.geoJSON(data, {
+                        style: { color: 'blue', weight: 2, opacity: 0.6 }
+                    }).addTo(map);
+                    map.fitBounds(okrugBorderLayer.getBounds());
+                })
+                .catch(err => console.error(`Ошибка загрузки границы ${okrug}:`, err));
+        });
+    });
 });
