@@ -49,12 +49,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === СОЗДАНИЕ МАРКЕРОВ ===
     function createMarker(lat, lon, title, popupHTML, icon, category, options = {}, okrug) {
-        const title_new = options.title_new || title;
-        const fullPopupHTML = `
-        <b>Адрес:</b> ${options.address || 'нет данных'}<br>
-        <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
-        <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
-        <div>${popupHTML}</div>
+    const title_new = options.title_new || title;
+    const fullPopupHTML = `
+        <div class="shop-info-content">
+            <div class="shop-info-details">
+                <div class="shop-info-label">Адрес:</div>
+                <div class="shop-info-value">${options.address || 'нет данных'}</div>
+                
+                <div class="shop-info-label">Округ:</div>
+                <div class="shop-info-value">${okrug || 'нет данных'}</div>
+                
+                <div class="shop-info-label">Контакты:</div>
+                <div class="shop-info-value">${options.contacts || 'нет данных'}</div>
+                
+                <div class="shop-info-label">Бренды:</div>
+                <div class="shop-info-value">
+                    <div class="shop-info-brands">
+                        ${(options.brands || 'нет данных').split(',').map(brand => 
+                            `<span class="brand-tag">${brand.trim()}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+            </div>
+            
+            ${options.description ? `
+            <div class="shop-info-description">
+                ${options.description}
+            </div>
+            ` : ''}
+            
+            <div class="shop-info-actions">
+                <button class="shop-info-btn shop-info-btn-primary" onclick="navigator.clipboard.writeText('${options.address || ''}')">
+                    <svg class="shop-info-btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 4V16C8 17.1046 8.89543 18 10 18H18C19.1046 18 20 17.1046 20 16V7.2426C20 6.44772 19.6839 5.68514 19.1213 5.12256L16.8774 2.87868C16.3149 2.31607 15.5523 2 14.7574 2H10C8.89543 2 8 2.89543 8 4Z" fill="currentColor"/>
+                        <path d="M4 8H6C6 6.89543 6.89543 6 8 6H15V20C15 21.1046 14.1046 22 13 22H6C4.89543 22 4 21.1046 4 20V10C4 8.89543 4.89543 8 6 8Z" fill="currentColor"/>
+                    </svg>
+                    Копировать адрес
+                </button>
+                ${options.contacts ? `
+                <button class="shop-info-btn shop-info-btn-secondary" onclick="window.open('tel:${options.contacts.replace(/[^0-9+]/g, '')}', '_blank')">
+                    <svg class="shop-info-btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 5C3 14.0604 9.93959 21 19 21C19.5523 21 20 20.5523 20 20V16.5C20 15.9477 19.5523 15.5 19 15.5C17.8796 15.5 16.8836 15.2539 16 14.9496C15.7053 14.8486 15.3795 14.902 15.1364 15.0894L12.799 16.799C10.024 15.5 8.5 13.976 7.20104 11.201L8.91061 8.86364C9.09802 8.62054 9.15142 8.29466 9.05041 8C8.74614 7.11644 8.5 6.12037 8.5 5C8.5 4.44772 8.05228 4 7.5 4H4C3.44772 4 3 4.44772 3 5Z" fill="currentColor"/>
+                    </svg>
+                    Позвонить
+                </button>
+                ` : ''}
+            </div>
+        </div>
     `;
         const marker = L.marker([lat, lon], { title, icon });
 
