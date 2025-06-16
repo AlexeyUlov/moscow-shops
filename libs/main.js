@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // === ИНИЦИАЛИЗАЦИЯ КАРТЫ ===
     const map = L.map('map', {
         attributionControl: false,
         zoomControl: true,
@@ -14,13 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             L.geoJSON(data, {
                 style: { color: 'red', weight: 3, opacity: 0.8 },
-            })
-                .addTo(map)
-                .bindPopup('МКАД');
+            }).addTo(map).bindPopup('МКАД');
         })
         .catch(err => console.error('Ошибка загрузки GeoJSON:', err));
 
-    // Категории слоёв
+    // === КАТЕГОРИИ СЛОЁВ ===
     const layersByCategory = {
         ушли: L.layerGroup(),
         реселлеры: L.layerGroup(),
@@ -28,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         секонд: L.layerGroup(),
     };
 
-    // Иконка-конструктор
+    Object.values(layersByCategory).forEach(group => group.addTo(map));
+
+    // === ИКОНКИ ===
     const ParkIcon = L.Icon.extend({
         options: {
             iconSize: [32, 32],
@@ -46,54 +47,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const allMarkers = [];
 
-    // Создаём маркер, добавляем его в нужный слой и хранилище
-function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
-    const title_new = options.title_new || title;
-    const fullPopupHTML = `
-        <b>Адрес:</b> ${options.address || 'нет данных'}<br>
-        <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
-        <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
-        <div>${popupHTML}</div>
-    `;
+    // === СОЗДАНИЕ МАРКЕРОВ ===
+    function createMarker(lat, lon, title, popupHTML, icon, category, options = {}) {
+        const title_new = options.title_new || title;
+        const fullPopupHTML = `
+            <b>Адрес:</b> ${options.address || 'нет данных'}<br>
+            <b>Бренды:</b> ${options.brands || 'нет данных'}<br>
+            <b>Контакты:</b> ${options.contacts || 'нет данных'}<br>
+            <div>${popupHTML}</div>
+        `;
+        const marker = L.marker([lat, lon], { title, icon });
 
-    const marker = L.marker([lat, lon], { title, icon });
-    
-marker.on('click', function(e) {
-    // Открываем сайдбар
-    const sidebar = document.getElementById('sidebar');
-    if (!sidebar) {
-        console.error('Элемент с ID "sidebar" не найден!');
-        return;
-    }
-    
-    // Добавляем классы для отображения
-    sidebar.classList.add('show');
-    sidebar.style.transform = 'translateX(0)';
-    
-    // Обновляем информацию в сайдбаре
-    document.getElementById('shopInfoTitle').textContent = title_new || title;
-    document.getElementById('shopInfoContent').innerHTML = fullPopupHTML;
-    
-    // Прокручиваем к информации
-    setTimeout(() => {
-        document.getElementById('sidebarShopInfo').scrollIntoView({
-            behavior: 'smooth',
-            block: 'end'
+        marker.on('click', e => {
+            openSidebar();
+            document.getElementById('shopInfoTitle').textContent = title_new;
+            document.getElementById('shopInfoContent').innerHTML = fullPopupHTML;
+            setTimeout(() => {
+                document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+            map.setView(e.latlng, map.getZoom());
         });
-    }, 100);
-    
-    // Центрируем карту
-    map.setView(e.latlng, map.getZoom());
-});
-        layersByCategory[category].addLayer(marker);
 
+        layersByCategory[category].addLayer(marker);
         allMarkers.push({
             title,
-            title_new, // Добавляем новый атрибут с тем же значением
+            title_new,
             titleLC: title.toLowerCase(),
-            title_newLC: title_new.toLowerCase(), // Добавляем lowercase версию нового атрибута
-            lat,
-            lon,
+            title_newLC: title_new.toLowerCase(),
+            lat, lon,
             popupHTML: fullPopupHTML,
             marker,
             address: options.address || '',
@@ -105,134 +86,6 @@ marker.on('click', function(e) {
         });
     }
 
-    // Добавляем все категории на карту
-    Object.values(layersByCategory).forEach(group => group.addTo(map));
-
-    // Функция показа панели с информацией о магазине
-    const panel = document.getElementById('shop-info-panel');
-    const body = document.getElementById('shop-info-body');
-    const closeBtn = document.getElementById('close-info');
-
-    function showShopInfo(title, html) {
-    // Обновляем панель в сайдбаре
-    document.getElementById('shopInfoTitle').textContent = title;
-    document.getElementById('shopInfoContent').innerHTML = html;
-    
-    // Показываем сайдбар, если он скрыт
-    document.getElementById('sidebar').classList.add('show');
-    
-    // Также оставляем возможность показать панель на карте (по желанию)
-    panel.classList.add('show');
-    body.innerHTML = `
-      <div class="p-2">
-        <h5 class="mb-2">${title}</h5>
-        <div>${html}</div>
-      </div>`;
-}
-
-    // Закрытие панели при клике по кнопке
-    closeBtn.addEventListener('click', () => panel.classList.remove('show'));
-
-    // Обновление видимости слоёв по выбранным категориям
-    function updateFilteredShops(selectedCategories) {
-        Object.entries(layersByCategory).forEach(([cat, group]) => {
-            if (selectedCategories.includes(cat)) {
-                map.addLayer(group);
-            } else {
-                map.removeLayer(group);
-            }
-        });
-    }
-    function initSelectAllButton() {
-        const selectAllBtn = document.getElementById('selectAllFilters');
-        const checkboxes = document.querySelectorAll('.filter-check');
-
-        if (!selectAllBtn || !checkboxes.length) {
-            console.error('Элементы фильтра не найдены!');
-            return;
-        }
-
-        // Обновляет текст кнопки в зависимости от состояния чекбоксов
-        function updateButtonText() {
-            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-            selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
-        }
-
-        // Обработчик для кнопки
-        selectAllBtn.addEventListener('click', () => {
-            const isAnyUnchecked = Array.from(checkboxes).some(checkbox => !checkbox.checked);
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = isAnyUnchecked;
-            });
-            updateButtonText();
-            updateFilters(); // Ваша существующая функция для обновления карты
-        });
-
-        // Обработчик для чекбоксов (если меняют вручную)
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                updateButtonText();
-            });
-        });
-
-        // Инициализация текста кнопки при загрузке
-        updateButtonText();
-    }
-
-    // Инициализируем кнопку
-    initSelectAllButton();
-
-    // Поиск по магазинам
-    const searchInput = document.getElementById('shop-search');
-    const searchResults = document.getElementById('search-results');
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.trim().toLowerCase();
-        searchResults.innerHTML = '';
-
-        if (!query) {
-            searchResults.style.display = 'none';
-            return;
-        }
-
-        const matches = allMarkers.filter(m =>
-            m.titleLC.includes(query) ||
-            m.title_newLC.includes(query) || // Добавляем поиск по новому атрибуту
-            m.addressLC.includes(query) ||
-            m.brandsLC.includes(query)
-        );
-
-        matches.forEach(m => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item list-group-item-action';
-        li.textContent = m.title_new || m.title; // Показываем новое название, если есть
-        li.addEventListener('click', () => {
-    map.setView([m.lat, m.lon], 15);
-    showShopInfo(m.title_new || m.title, m.popupHTML);
-    searchResults.style.display = 'none';
-    searchInput.value = '';
-    document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth' });
-});
-        searchResults.appendChild(li);
-    });
-
-    searchResults.style.display = matches.length ? 'block' : 'none';
-});
-
-    // Инициализация фильтров
-    const checkboxes = document.querySelectorAll('.filter-check');
-
-    function updateFilters() {
-        const selected = Array.from(checkboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
-        updateFilteredShops(selected);
-    }
-
-    checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
-    updateFilters();
-
-    // ---- Добавляем маркеры из markersData ----
     if (typeof markersData !== 'undefined' && Array.isArray(markersData)) {
         markersData.forEach(data => {
             createMarker(
@@ -249,106 +102,152 @@ marker.on('click', function(e) {
         console.error('markersData не найден или не массив');
     }
 
-    // === Логика для кнопки информации и модального окна ===
+    // === ФИЛЬТРЫ ===
+    const checkboxes = document.querySelectorAll('.filter-check');
+
+    function updateFilteredShops(selectedCategories) {
+        Object.entries(layersByCategory).forEach(([cat, group]) => {
+            if (selectedCategories.includes(cat)) {
+                map.addLayer(group);
+            } else {
+                map.removeLayer(group);
+            }
+        });
+    }
+
+    function updateFilters() {
+        const selected = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        updateFilteredShops(selected);
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
+    updateFilters();
+
+    function initSelectAllButton() {
+        const selectAllBtn = document.getElementById('selectAllFilters');
+        if (!selectAllBtn || !checkboxes.length) return;
+
+        function updateButtonText() {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
+        }
+
+        selectAllBtn.addEventListener('click', () => {
+            const isAnyUnchecked = Array.from(checkboxes).some(cb => !cb.checked);
+            checkboxes.forEach(cb => cb.checked = isAnyUnchecked);
+            updateButtonText();
+            updateFilters();
+        });
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateButtonText));
+        updateButtonText();
+    }
+    initSelectAllButton();
+
+    // === ПОИСК ===
+    const searchInput = document.getElementById('shop-search');
+    const searchResults = document.getElementById('search-results');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        searchResults.innerHTML = '';
+
+        if (!query) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        const matches = allMarkers.filter(m =>
+            m.titleLC.includes(query) ||
+            m.title_newLC.includes(query) ||
+            m.addressLC.includes(query) ||
+            m.brandsLC.includes(query)
+        );
+
+        matches.forEach(m => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item list-group-item-action';
+            li.textContent = m.title_new || m.title;
+            li.addEventListener('click', () => {
+                map.setView([m.lat, m.lon], 15);
+                showShopInfo(m.title_new || m.title, m.popupHTML);
+                searchResults.style.display = 'none';
+                searchInput.value = '';
+                document.getElementById('sidebarShopInfo').scrollIntoView({ behavior: 'smooth' });
+            });
+            searchResults.appendChild(li);
+        });
+
+        searchResults.style.display = matches.length ? 'block' : 'none';
+    });
+
+    // === ИНФОРМАЦИЯ / МОДАЛКА ===
     const infoModal = document.getElementById('infoModal');
     const toggleInfoBtn = document.getElementById('toggleInfoModal');
     const closeInfoBtn = document.getElementById('closeInfoModal');
 
-    toggleInfoBtn.addEventListener('click', () => {
-        infoModal.style.display = 'block';
+    toggleInfoBtn.addEventListener('click', () => infoModal.style.display = 'block');
+    closeInfoBtn.addEventListener('click', () => infoModal.style.display = 'none');
+
+    window.addEventListener('click', e => {
+        if (e.target === infoModal) infoModal.style.display = 'none';
     });
 
-    closeInfoBtn.addEventListener('click', () => {
-        infoModal.style.display = 'none';
-    });
+    // === САЙДБАР ===
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
 
-    // Чтобы закрывать модалку по клику вне окна (по желанию)
-    window.addEventListener('click', (e) => {
-        if (e.target === infoModal) {
-            infoModal.style.display = 'none';
+    function openSidebar() {
+        sidebar.classList.add('show');
+        sidebar.style.transform = 'translateX(0)';
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('show');
+        sidebar.style.transform = 'translateX(-100%)';
+    }
+
+    sidebarToggleBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (sidebar.classList.contains('show')) {
+            closeSidebar();
+        } else {
+            openSidebar();
         }
     });
 
-    // Управление боковой панелью
-// Управление боковой панелью
-// Управление боковой панелью
-// Управление боковой панелью
-const sidebar = document.getElementById('sidebar');
-const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
-const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-
-function openSidebar() {
-    sidebar.classList.add('show');
-    sidebar.style.transform = 'translateX(0)';
-}
-
-function closeSidebar() {
-    sidebar.classList.remove('show');
-    sidebar.style.transform = 'translateX(-100%)';
-}
-
-// Обработчики событий
-sidebarToggleBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    if (sidebar.classList.contains('show')) {
+    sidebarCloseBtn.addEventListener('click', e => {
+        e.stopPropagation();
         closeSidebar();
-    } else {
-        openSidebar();
-    }
-});
-
-sidebarCloseBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    closeSidebar();
-});
-
-// Закрытие при клике вне панели
-document.addEventListener('click', function(e) {
-    if (!sidebar.contains(e.target) && 
-        e.target !== sidebarToggleBtn && 
-        !e.target.closest('.leaflet-marker-icon')) {
-        closeSidebar();
-    }
-});
-
-// Предотвращаем закрытие при клике внутри панели
-sidebar.addEventListener('click', function(e) {
-    e.stopPropagation();
-});
-
-// Фильтрация по категориям
-const categoryButtons = document.querySelectorAll('.sidebar-category');
-categoryButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        categoryButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        const category = button.dataset.category;
-        // Здесь должна быть логика фильтрации магазинов
     });
-});
 
+    document.addEventListener('click', e => {
+        if (!sidebar.contains(e.target) &&
+            e.target !== sidebarToggleBtn &&
+            !e.target.closest('.leaflet-marker-icon')) {
+            closeSidebar();
+        }
+    });
+
+    sidebar.addEventListener('click', e => e.stopPropagation());
+
+    // === КНОПКИ КОНТАКТОВ ===
     document.getElementById('emailButton').addEventListener('click', async () => {
-    const email = 'alexey.ulov@mail.ru';
-    const tooltip = document.getElementById('emailTooltip');
-    
-    try {
-        // Копируем email в буфер обмена
-        await navigator.clipboard.writeText(email);
-        
-        // Показываем уведомление
-        tooltip.classList.add('show');
-        
-        // Скрываем уведомление через 2 секунды
-        setTimeout(() => {
-            tooltip.classList.remove('show');
-        }, 2000);
-        
-    } catch (err) {
-        // Если не удалось скопировать, открываем почтовый клиент
-        console.error('Ошибка копирования: ', err);
-        window.location.href = `mailto:${email}`;
-    }
-});
+        const email = 'alexey.ulov@mail.ru';
+        const tooltip = document.getElementById('emailTooltip');
+
+        try {
+            await navigator.clipboard.writeText(email);
+            tooltip.classList.add('show');
+            setTimeout(() => tooltip.classList.remove('show'), 2000);
+        } catch (err) {
+            console.error('Ошибка копирования: ', err);
+            window.location.href = `mailto:${email}`;
+        }
+    });
 
     document.getElementById('vkButton').addEventListener('click', () => {
         window.open('https://vk.com/petergriffinfunnymoments', '_blank');
@@ -358,119 +257,17 @@ categoryButtons.forEach(button => {
         window.open('https://t.me/petergriffinfunnymoments', '_blank');
     });
 
-    // Обработчики для модального окна авторизации
-const authModal = document.getElementById('authModal');
-const authButton = document.getElementById('authButton');
-const closeAuthModal = document.getElementById('closeAuthModal');
+    // === ПАНЕЛЬ ФИЛЬТРОВ ===
+    const toggleFilterBtn = document.getElementById('toggleFilterPanel');
+    const filterPanel = document.getElementById('filterPanel');
+    const closeFilterBtn = document.getElementById('closeFilterPanel');
 
-// Открытие модального окна
-authButton.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-});
-
-// Закрытие модального окна
-closeAuthModal.addEventListener('click', () => {
-    authModal.style.display = 'none';
-});
-
-// Закрытие при клике вне окна
-window.addEventListener('click', (e) => {
-    if (e.target === authModal) {
-        authModal.style.display = 'none';
-    }
-});
-
-// Обработка формы входа
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    // Здесь должна быть логика авторизации
-    console.log('Вход:', { username, password });
-    authModal.style.display = 'none';
-});
-
-// Обработка формы регистрации
-document.getElementById('registerForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const username = document.getElementById('regUsername').value;
-    const password = document.getElementById('regPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    
-    if (password !== confirmPassword) {
-        return;
-    }
-    
-    // Здесь должна быть логика регистрации
-    console.log('Регистрация:', { username, password });
-    
-    // Переключаем на вкладку входа после регистрации
-    document.getElementById('login-tab').click();
-    authModal.style.display = 'none';
-});
-
-// Управление панелью фильтров
-const filterPanel = document.getElementById('filterPanel');
-const toggleFilterBtn = document.getElementById('toggleFilterPanel');
-const closeFilterBtn = document.getElementById('closeFilterPanel');
-
-function toggleFilterPanel() {
-    filterPanel.classList.toggle('show');
-}
-
-toggleFilterBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleFilterPanel();
-});
-
-closeFilterBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleFilterPanel();
-});
-
-// Закрытие при клике вне панели
-document.addEventListener('click', function(e) {
-    if (!filterPanel.contains(e.target) && e.target !== toggleFilterBtn) {
-        filterPanel.classList.remove('show');
-    }
-});
-
-// Предотвращаем закрытие при клике внутри панели
-filterPanel.addEventListener('click', function(e) {
-    e.stopPropagation();
-});
-
-// Инициализация кнопки "Снять все"
-function initSelectAllButton() {
-    const selectAllBtn = document.getElementById('selectAllFilters');
-    const checkboxes = document.querySelectorAll('.filter-check');
-
-    if (!selectAllBtn || !checkboxes.length) return;
-
-    function updateButtonText() {
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-        selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
-    }
-
-    selectAllBtn.addEventListener('click', () => {
-        const isAnyUnchecked = Array.from(checkboxes).some(checkbox => !checkbox.checked);
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = isAnyUnchecked;
-        });
-        updateButtonText();
-        updateFilters();
+    toggleFilterBtn.addEventListener('click', () => {
+        filterPanel.style.display = (filterPanel.style.display === 'none' || !filterPanel.style.display) ? 'block' : 'none';
     });
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            updateButtonText();
-        });
+    closeFilterBtn.addEventListener('click', () => {
+        filterPanel.style.display = 'none';
     });
-
-    updateButtonText();
-}
-
-initSelectAllButton();
 
 });
