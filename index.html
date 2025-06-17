@@ -114,21 +114,30 @@
             <div class="contact-section mt-3">
                 <h5>Связаться с нами</h5>
                 <div class="d-flex gap-2">
-                    <div class="contact-btn-wrapper" style="position: relative;">
+                    <div class="contact-btn-wrapper" style="--i: 0;">
                         <button class="contact-btn" id="emailButton">
                             <img src="./data/icons/email.png" alt="Почта" class="contact-icon">
                         </button>
-                        <div class="info-tooltip" id="emailTooltip">Скопировано в буфер!</div>
+                        <span class="contact-tooltip">Скопировать почту</span>
                     </div>
-                    <button class="contact-btn" id="vkButton">
-                        <img src="./data/icons/vk.png" alt="VK" class="contact-icon">
-                    </button>
-                    <button class="contact-btn" id="telegramButton">
-                        <img src="./data/icons/telegram.png" alt="Telegram" class="contact-icon">
-                    </button>
+                    <div class="contact-btn-wrapper" style="--i: 1;">
+                        <button class="contact-btn" id="vkButton">
+                            <img src="./data/icons/vk.png" alt="VK" class="contact-icon">
+                        </button>
+                        <span class="contact-tooltip">VK</span>
+                    </div>
+                    <div class="contact-btn-wrapper" style="--i: 2;">
+                        <button class="contact-btn" id="telegramButton">
+                            <img src="./data/icons/telegram.png" alt="Telegram" class="contact-icon">
+                        </button>
+                        <span class="contact-tooltip">Telegram</span>
+                    </div>
                 </div>
+
             </div>
         </div>
+    </div>
+    </div>
     </div>
 
     <!-- Боковая панель -->

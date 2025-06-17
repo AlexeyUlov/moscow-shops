@@ -319,7 +319,8 @@ body {
 
 .filter-tooltip,
 .info-tooltip,
-.search-tooltip {
+.search-tooltip,
+.contact-tooltip {
     position: absolute;
     background: rgba(0, 0, 0, 0.8);
     color: white;
@@ -332,27 +333,19 @@ body {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.filter-tooltip {
-    top: 110%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-}
-
-.info-tooltip {
-    top: 86%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-}
-
-.search-tooltip {
-    top: 110%;
+.filter-tooltip,
+.info-tooltip,
+.search-tooltip,
+.contact-tooltip {
+    top: 120%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
 }
 
 .filter-container:hover .filter-tooltip,
 .info-container:hover .info-tooltip,
-.search-container:hover .search-tooltip {
+.search-container:hover .search-tooltip,
+.contact-btn-wrapper:hover .contact-tooltip {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
@@ -717,4 +710,55 @@ body {
         line-height: 40px !important;
         font-size: 1.2rem !important;
     }
+}
+
+/* === АНИМАЦИИ ДЛЯ ВСЕХ КНОПОК === */
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contact-btn-wrapper,
+.search-container,
+.info-container,
+.filter-container {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInUp 0.5s forwards;
+}
+
+.contact-btn-wrapper {
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+.search-container {
+    --i: 0;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+.info-container {
+    --i: 1;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+.filter-container {
+    --i: 2;
+    animation-delay: calc(var(--i) * 0.1s);
+}
+
+.contact-btn,
+.search-btn,
+.info-btn,
+.filter-btn {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-btn:hover,
+.search-btn:hover,
+.info-btn:hover,
+.filter-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px #33cccc;
 }
