@@ -9,7 +9,7 @@ body {
 *,
 *::before,
 *::after {
-    font-family: "Comic Sans MS", cursive, sans-serif !important;
+    font-family: "Segoe UI", cursive, sans-serif !important;
 }
 
 #map {
@@ -652,7 +652,7 @@ body {
 
 .brand-tag {
     background-color: #f0f6ff;
-    color: #3366FF;
+    color: #33cccc; /* Изменено с #3366FF на #33cccc */
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
@@ -690,19 +690,19 @@ body {
 }
 
 .shop-info-btn-primary {
-    background-color: #3366FF;
+    background-color: #33cccc;
     color: white;
     border: none;
 }
 
 .shop-info-btn-primary:hover {
-    background-color: #2952CC;
+    background-color: #0d8f8f;
 }
 
 .shop-info-btn-secondary {
     background-color: white;
-    color: #3366FF;
-    border: 1px solid #3366FF;
+    color: #33cccc;
+    border: 1px solid #0d8f8f;
 }
 
 .shop-info-btn-secondary:hover {
