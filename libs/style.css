@@ -179,23 +179,18 @@ body {
 .btn-separator {
     position: absolute;
     top: 20%;
-    /* чуть отступ сверху */
     bottom: 20%;
-    /* чуть отступ снизу */
     width: 1px;
     background-color: #ccc;
     right: 37px;
-    /* посмотри где кнопки, отрегулируй */
     z-index: 5;
     pointer-events: none;
-    /* чтобы разделитель не мешал кликам по кнопкам */
 }
 
 /* === КНОПКА ОТОБРАЖЕНИЯ МАРКЕРОВ ВНУТРИ ПОИСКА === */
 .filter-search-btn {
     position: absolute;
     right: 42px;
-    /* слева от кнопки очистки */
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -253,10 +248,8 @@ body {
     transition: opacity 0.3s ease, transform 0.3s ease;
     z-index: 10;
     left: 50%;
-    /* можешь регулировать здесь */
 }
 
-/* Появление подсказок */
 .filter-search-wrapper:hover .search-tooltip-filter,
 .clear-search-wrapper:hover .search-tooltip-clear {
     opacity: 1;
@@ -301,13 +294,6 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     transition: background-color 0.3s ease;
 }
-
-/* .filter-btn:hover,
-.info-btn:hover,
-.contact-btn:hover,
-.search-btn:hover {
-    background-color: #f0f0f0 !important;
-} */
 
 .filter-icon,
 .info-icon,
@@ -401,6 +387,7 @@ body {
     margin-bottom: 6px;
 }
 
+/* Кнопка закрытия */
 .close-btn {
     position: absolute;
     top: -5px;
@@ -414,13 +401,31 @@ body {
     text-align: center;
     color: #666;
     border-radius: 50%;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.3s ease;
     cursor: pointer;
 }
 
+/* Hover — лёгкое увеличение и вращение */
 .close-btn:hover {
     background: rgba(0, 0, 0, 0.1);
-    color: #000;
+    color: #33cccc;
+    transform: scale(1.2) rotate(90deg);
+}
+
+/* Активное состояние — быстрое вращение */
+.close-btn:active {
+    animation: closeSpin 0.4s ease forwards;
+}
+
+/* Анимация вращения при клике */
+@keyframes closeSpin {
+    0% {
+        transform: scale(1.2) rotate(90deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 /* === САЙДБАР === */
@@ -458,18 +463,42 @@ body {
 }
 
 .sidebar-close-btn {
-    background: none;
+    background: transparent;
     border: none;
     cursor: pointer;
     padding: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 28px;
+    color: #666;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.3s ease;
 }
 
+/* Hover — лёгкое увеличение и вращение */
 .sidebar-close-btn:hover {
-    background: #f5f5f5;
+    background: rgba(0, 0, 0, 0.1);
+    color: #33cccc;
+    transform: scale(1.2) rotate(90deg);
+}
+
+/* Активное состояние — быстрое вращение */
+.sidebar-close-btn:active {
+    animation: closeSpin 0.4s ease forwards;
+}
+
+/* Повторяем анимацию из модалки */
+@keyframes closeSpin {
+    0% {
+        transform: scale(1.2) rotate(90deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 .sidebar-content {
