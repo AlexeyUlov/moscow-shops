@@ -185,12 +185,12 @@ body {
 
 .filter-tooltip {
     top: 110%;
-    right: -8%;
-    transform: translateX(9px) translateY(10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
 }
 
 .info-tooltip {
-    top: 84%;
+    top: 86%;
     left: 50%;
     transform: translateX(-50%) translateY(10px);
 }
@@ -201,18 +201,8 @@ body {
     transform: translateX(-50%) translateY(10px);
 }
 
-.filter-container:hover .filter-tooltip {
-    opacity: 1;
-    transform: translateX(9px) translateY(0);
-    pointer-events: auto;
-}
-
-.info-container:hover .info-tooltip {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    pointer-events: auto;
-}
-
+.filter-container:hover .filter-tooltip,
+.info-container:hover .info-tooltip,
 .search-container:hover .search-tooltip {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
