@@ -391,5 +391,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // === ШКАЛА ===
+    const scaleBar = document.getElementById('scaleBar');
+    const scaleLabel = document.getElementById('scaleLabel');
+
+    function getRoundNum(num) {
+        const pow10 = Math.pow(10, Math.floor(Math.log10(num)));
+        const d = num / pow10;
+
+        if (d >= 10) return 10 * pow10;
+        if (d >= 5) return 5 * pow10;
+        if (d >= 3) return 3 * pow10;
+        if (d >= 2) return 2 * pow10;
+        return 1 * pow10;
+    }
+
+    function updateScale() {
+        const centerLat = map.getCenter().lat;
+        const zoom = map.getZoom();
+
+        // Метры на один пиксель
+        const metersPerPixel = 40075016.686 * Math.abs(Math.cos(centerLat * Math.PI / 180)) / Math.pow(2, zoom + 8);
+
+        // Максимальная длина шкалы в пикселях (примерно 100)
+        const maxBarWidth = 100;
+
+        // Расстояние в метрах, соответствующее 100 пикселям
+        let maxMeters = metersPerPixel * maxBarWidth;
+
+        // Округляем до удобного значения (1, 2, 3, 5, 10, 20, ...)
+        let roundedMeters = getRoundNum(maxMeters);
+
+        // Подгоняем ширину полосы под округленное значение
+        let barWidth = roundedMeters / metersPerPixel;
+
+        // Форматируем подпись
+        let label;
+        if (roundedMeters < 1000) {
+            label = roundedMeters + ' м';
+        } else {
+            label = (roundedMeters / 1000) + ' км';
+        }
+
+        scaleBar.style.width = barWidth + 'px';
+        scaleLabel.textContent = label;
+    }
+
+    // Обновляем шкалу при зуме и перемещении карты
+    map.on('zoom move', updateScale);
+
+    // Инициализация
+    updateScale();
+
 
 });
