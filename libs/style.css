@@ -153,19 +153,19 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.filter-btn:hover,
+/* .filter-btn:hover,
 .info-btn:hover,
 .contact-btn:hover,
 .search-btn:hover {
     background-color: #f0f0f0 !important;
-}
+} */
 
 .filter-icon,
 .info-icon,
 .contact-icon,
 .search-icon {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
 }
 
 .filter-tooltip,
@@ -557,8 +557,8 @@ body {
     .contact-icon,
     .sidebar-toggle-btn svg,
     .search-icon {
-        width: 20px;
-        height: 20px;
+        width: 30px;
+        height: 30px;
     }
 
     /* Zoom-кнопки Leaflet */

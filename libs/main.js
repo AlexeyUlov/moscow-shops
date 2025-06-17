@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === СОЗДАНИЕ МАРКЕРОВ ===
     function createMarker(lat, lon, title, popupHTML, icon, category, options = {}, okrug) {
-    const title_new = options.title_new || title;
-    const fullPopupHTML = `
+        const title_new = options.title_new || title;
+        const fullPopupHTML = `
         <div class="shop-info-content">
             <div class="shop-info-details">
                 <div class="shop-info-label">Адрес:</div>
@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="shop-info-label">Бренды:</div>
                 <div class="shop-info-value">
                     <div class="shop-info-brands">
-                        ${(options.brands || 'нет данных').split(',').map(brand => 
-                            `<span class="brand-tag">${brand.trim()}</span>`
-                        ).join('')}
+                        ${(options.brands || 'нет данных').split(',').map(brand =>
+            `<span class="brand-tag">${brand.trim()}</span>`
+        ).join('')}
                     </div>
                 </div>
             </div>
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(res => res.json())
                 .then(data => {
                     okrugBorderLayer = L.geoJSON(data, {
-                        style: { color: 'blue', weight: 2, opacity: 0.6 }
+                        style: { color: 'blue', weight: 3, opacity: 0.8 }
                     }).addTo(map);
                     map.fitBounds(okrugBorderLayer.getBounds());
                 })
