@@ -141,17 +141,31 @@
                 </svg>
             </button>
         </div>
+
         <div class="sidebar-content">
             <div id="shop-search-container">
                 <div class="input-group position-relative">
                     <input type="text" id="shop-search" class="form-control" placeholder="Поиск магазинов" />
-                    <button type="button" id="clearSearchBtn" class="clear-search-btn">
-                        <img src="./data/icons/trash.png" alt="Очистить" class="clear-icon static-icon">
-                        <img src="./data/icons/trash.gif" alt="Очистить" class="clear-icon gif-icon">
-                    </button>
+
+                    <div class="btn-with-tooltip filter-search-wrapper">
+                        <button type="button" id="filterSearchBtn" class="filter-search-btn">
+                            <img src="./data/icons/filter.png" alt="Фильтр" class="filter-icon static-icon">
+                            <img src="./data/icons/filter.gif" alt="Фильтр" class="filter-icon gif-icon">
+                        </button>
+                        <span class="search-tooltip-filter">Поиск</span>
+                    </div>
+                    <div class="btn-separator"></div>
+                    <div class="btn-with-tooltip clear-search-wrapper">
+                        <button type="button" id="clearSearchBtn" class="clear-search-btn">
+                            <img src="./data/icons/trash.png" alt="Очистить" class="clear-icon static-icon">
+                            <img src="./data/icons/trash.gif" alt="Очистить" class="clear-icon gif-icon">
+                        </button>
+                        <span class="search-tooltip-clear">Очистить</span>
+                    </div>
                 </div>
                 <ul id="search-results" class="list-group mt-1"></ul>
             </div>
+
             <div class="sidebar-shop-info" id="sidebarShopInfo">
                 <div class="shop-info-header">
                     <h5 id="shopInfoTitle">Выберите магазин</h5>

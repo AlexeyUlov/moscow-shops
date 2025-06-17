@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filterPanel.style.display = 'none';
     });
 
-
+    // === ЛОГИКА ОТОБРАЖЕНИЕ ОКРУГОВ ===
     let okrugBorderLayer = null;
 
     document.querySelectorAll('.okrug-btn').forEach(btn => {
@@ -347,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // === ЛОГИКА ОЧИСТКИ ПОИСКА ===
     const clearBtn = document.getElementById('clearSearchBtn');
     clearBtn.addEventListener('click', () => {
         const searchInput = document.getElementById('shop-search');
@@ -355,6 +356,39 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.innerHTML = '';
         searchResults.style.display = 'none';
         searchInput.focus();
+    });
+
+    // === ЛОГИКА ОТОБРАЖЕНИЯ МАРКЕРОВ ПРИ ПОИСКЕ ===
+    const filterSearchBtn = document.getElementById('filterSearchBtn');
+
+    filterSearchBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        if (!query) {
+            // Показать все маркеры
+            allMarkers.forEach(m => {
+                m.marker.addTo(layersByCategory[m.marker.options.category] || map); // или просто map
+                m.marker.setOpacity(1);
+            });
+            return;
+        }
+
+        allMarkers.forEach(m => {
+            const match = m.titleLC.includes(query) ||
+                m.title_newLC.includes(query) ||
+                m.brandsLC.includes(query) ||
+                m.addressLC.includes(query);
+
+            if (match) {
+                m.marker.addTo(layersByCategory[m.marker.options.category] || map);
+                m.marker.setOpacity(1);
+            } else {
+                if (layersByCategory[m.marker.options.category]) {
+                    layersByCategory[m.marker.options.category].removeLayer(m.marker);
+                } else {
+                    map.removeLayer(m.marker);
+                }
+            }
+        });
     });
 
 });

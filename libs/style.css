@@ -94,6 +94,13 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     font-size: 14px;
+    padding-right: 72px;
+    /* Добавляем пространство под кнопку очистки */
+}
+
+.input-group {
+    overflow: visible;
+    /* Чтобы кнопка не обрезалась */
 }
 
 #shop-search:focus {
@@ -139,12 +146,17 @@ body {
     cursor: pointer;
 }
 
+.clear-search-btn {
+    z-index: 5;
+}
+
 .clear-search-btn .clear-icon {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    transition: opacity 0.2s ease;
 }
 
 .clear-search-btn .gif-icon {
@@ -161,6 +173,102 @@ body {
 
 .clear-search-btn:hover .gif-icon {
     display: block;
+}
+
+/* === РАЗДЕЛИТЕЛЬ КНОПОК В ПОИСКЕ === */
+.btn-separator {
+    position: absolute;
+    top: 20%;
+    /* чуть отступ сверху */
+    bottom: 20%;
+    /* чуть отступ снизу */
+    width: 1px;
+    background-color: #ccc;
+    right: 37px;
+    /* посмотри где кнопки, отрегулируй */
+    z-index: 5;
+    pointer-events: none;
+    /* чтобы разделитель не мешал кликам по кнопкам */
+}
+
+/* === КНОПКА ОТОБРАЖЕНИЯ МАРКЕРОВ ВНУТРИ ПОИСКА === */
+.filter-search-btn {
+    position: absolute;
+    right: 42px;
+    /* слева от кнопки очистки */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.filter-search-btn .filter-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.2s ease;
+}
+
+.filter-search-btn .gif-icon {
+    display: none;
+}
+
+.filter-search-btn .static-icon {
+    display: block;
+}
+
+.filter-search-btn:hover .static-icon {
+    display: none;
+}
+
+.filter-search-btn:hover .gif-icon {
+    display: block;
+}
+
+/* === ПОДСКАЗКИ ДЛЯ КНОПОК В ПОИСКЕ === */
+.search-tooltip-filter,
+.search-tooltip-clear {
+    position: absolute;
+    top: 100%;
+    margin-top: 2px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(5px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    left: 50%;
+    /* можешь регулировать здесь */
+}
+
+/* Появление подсказок */
+.filter-search-wrapper:hover .search-tooltip-filter,
+.clear-search-wrapper:hover .search-tooltip-clear {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.search-tooltip-filter {
+    left: calc(50% + 94px);
+}
+
+.search-tooltip-clear {
+    left: calc(50% + 126px);
 }
 
 /* === КНОПКИ ФИЛЬТР И ИНФО === */
