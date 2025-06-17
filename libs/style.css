@@ -396,41 +396,74 @@ body {
 /* Кнопка закрытия */
 .close-btn {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 32px;
-    height: 32px;
+    top: -8px;
+    right: -8px;
+    width: 36px;
+    height: 36px;
     background: transparent;
     border: none;
-    font-size: 28px;
-    line-height: 32px;
-    text-align: center;
-    color: #666;
     border-radius: 50%;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.3s ease;
     cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
 }
 
-/* Hover — лёгкое увеличение и вращение */
+.close-icon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.4s ease;
+}
+
+.close-icon::before,
+.close-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    background: #555;
+    transform-origin: center center;
+}
+
+.close-icon::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-icon::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Hover эффект — вращаем всю иконку */
 .close-btn:hover {
     background: rgba(0, 0, 0, 0.1);
-    color: #33cccc;
+}
+
+.close-btn:hover .close-icon {
     transform: scale(1.2) rotate(90deg);
 }
 
-/* Активное состояние — быстрое вращение */
-.close-btn:active {
-    animation: closeSpin 0.4s ease forwards;
+.close-btn:hover .close-icon::before,
+.close-btn:hover .close-icon::after {
+    background: #33cccc;
 }
 
-/* Анимация вращения при клике */
-@keyframes closeSpin {
+/* Клик — вращение всей иконки */
+.close-btn:active .close-icon {
+    animation: close-spin 0.4s ease forwards;
+}
+
+@keyframes close-spin {
     0% {
         transform: scale(1.2) rotate(90deg);
     }
 
     100% {
-        transform: scale(1) rotate(360deg);
+        transform: scale(1) rotate(450deg);
     }
 }
 
@@ -652,7 +685,8 @@ body {
 
 .brand-tag {
     background-color: #f0f6ff;
-    color: #33cccc; /* Изменено с #3366FF на #33cccc */
+    color: #33cccc;
+    /* Изменено с #3366FF на #33cccc */
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
