@@ -122,6 +122,47 @@ body {
     opacity: 0;
 }
 
+/* === КНОПКА ОТЧИСТКИ ПОИСКА === */
+.clear-search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.clear-search-btn .clear-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.clear-search-btn .gif-icon {
+    display: none;
+}
+
+.clear-search-btn .static-icon {
+    display: block;
+}
+
+.clear-search-btn:hover .static-icon {
+    display: none;
+}
+
+.clear-search-btn:hover .gif-icon {
+    display: block;
+}
+
 /* === КНОПКИ ФИЛЬТР И ИНФО === */
 .filter-container {
     position: fixed;

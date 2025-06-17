@@ -346,4 +346,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(err => console.error(`Ошибка загрузки границы ${okrug}:`, err));
         });
     });
+
+    const clearBtn = document.getElementById('clearSearchBtn');
+    clearBtn.addEventListener('click', () => {
+        const searchInput = document.getElementById('shop-search');
+        const searchResults = document.getElementById('search-results');
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+        searchResults.style.display = 'none';
+        searchInput.focus();
+    });
+
 });

@@ -143,8 +143,12 @@
         </div>
         <div class="sidebar-content">
             <div id="shop-search-container">
-                <div class="input-group">
+                <div class="input-group position-relative">
                     <input type="text" id="shop-search" class="form-control" placeholder="Поиск магазинов" />
+                    <button type="button" id="clearSearchBtn" class="clear-search-btn">
+                        <img src="./data/icons/trash.png" alt="Очистить" class="clear-icon static-icon">
+                        <img src="./data/icons/trash.gif" alt="Очистить" class="clear-icon gif-icon">
+                    </button>
                 </div>
                 <ul id="search-results" class="list-group mt-1"></ul>
             </div>
@@ -201,18 +205,16 @@
             filterBtn.addEventListener('mouseleave', () => {
                 filterIcon.src = './data/icons/filters.png';
             });
-        });
+            // Кнопка поиска (боковая панель)
+            const searchBtn = document.getElementById('sidebarToggleBtn');
+            const searchIcon = document.getElementById('searchIcon');
 
-        // Кнопка поиска (боковая панель)
-        const searchBtn = document.getElementById('sidebarToggleBtn');
-        const searchIcon = document.getElementById('searchIcon');
-
-        searchBtn.addEventListener('mouseenter', () => {
-            searchIcon.src = './data/icons/search.gif';
-        });
-
-        searchBtn.addEventListener('mouseleave', () => {
-            searchIcon.src = './data/icons/search.png';
+            searchBtn.addEventListener('mouseenter', () => {
+                searchIcon.src = './data/icons/search.gif';
+            });
+            searchBtn.addEventListener('mouseleave', () => {
+                searchIcon.src = './data/icons/search.png';
+            });
         });
     </script>
 
