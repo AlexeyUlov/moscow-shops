@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === ИНИЦИАЛИЗАЦИЯ КАРТЫ ===
     const map = L.map('map', {
         attributionControl: false,
-        zoomControl: true,
+        zoomControl: false,
     }).setView([55.751244, 37.618423], 11);
 
     L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -472,5 +472,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Инициализация
     updateScale();
 
+    document.getElementById('zoomInBtn').addEventListener('click', () => {
+        map.zoomIn();
+    });
+    document.getElementById('zoomOutBtn').addEventListener('click', () => {
+        map.zoomOut();
+    });
 
 });
