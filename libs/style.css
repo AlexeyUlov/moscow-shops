@@ -1123,24 +1123,129 @@ body {
 /* === АДАПТАЦИЯ === */
 @media (max-width: 768px) {
 
+    /* Уменьшаем размеры кнопок */
+    .zoom-btn,
     .filter-btn,
     .info-btn,
     .contact-btn,
-    .sidebar-toggle-btn,
-    .search-btn,
-    .zoom-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
+    .search-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
     }
 
+    .zoom-icon,
     .filter-icon,
     .info-icon,
     .contact-icon,
-    .sidebar-toggle-btn svg,
-    .search-icon,
-    .zoom-icon {
-        width: 30px;
-        height: 30px;
+    .search-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .custom-zoom-controls {
+        right: 10px;
+        gap: 8px;
+    }
+
+    .filter-container {
+        right: 70px;
+        top: 12px;
+    }
+
+    .search-container {
+        left: 10px;
+        top: 12px;
+    }
+
+    .sidebar-toggle-btn {
+        left: 10px;
+        top: 10px;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+    }
+
+    #shop-info-panel {
+        width: calc(100% - 40px);
+        left: 20px;
+        top: 80px;
+        max-height: 60vh;
+    }
+
+    .info-modal {
+        width: 92%;
+        padding: 16px;
+    }
+
+    .info-modal-content h2 {
+        font-size: 18px;
+    }
+
+    .info-modal-content p,
+    .info-modal-content ul li {
+        font-size: 13px;
+    }
+
+    #shop-search-container {
+        padding: 12px 16px;
+    }
+
+    #shop-search {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .filter-panel {
+        top: 70px;
+        right: 10px;
+        width: 90%;
+        max-width: 280px;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-content {
+        padding: 0 16px;
+    }
+
+    .shop-info-header h5 {
+        font-size: 18px;
+    }
+
+    .shop-info-content p,
+    .shop-info-content b {
+        font-size: 14px;
+    }
+
+    .zoom-tooltip,
+    .search-tooltip,
+    .filter-tooltip,
+    .info-tooltip,
+    .contact-tooltip {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+
+    .info-btn {
+        position: fixed;
+        /* если еще не указано в базовых стилях */
+        top: -4px;
+        /* регулируй вверх/вниз */
+        right: 0px;
+        /* регулируй влево/вправо */
+        z-index: 1000;
+        /* чтобы была поверх остальных */
+    }
+
+    .info-tooltip {
+        position: fixed;
+        /* если еще не указано в базовых стилях */
+        top: 46px;
+        /* регулируй вверх/вниз */
+        right: -130px;
+        /* регулируй влево/вправо */
     }
 }
