@@ -325,6 +325,13 @@ body {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+/* Подсказка - почта скопирована */
+.contact-tooltip.show {
+    opacity: 1 !important;
+    transform: translateX(-50%) translateY(0) !important;
+    pointer-events: auto !important;
+}
+
 .filter-tooltip,
 .info-tooltip,
 .search-tooltip,

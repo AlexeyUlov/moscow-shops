@@ -284,8 +284,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             await navigator.clipboard.writeText(email);
+
+            // Показываем "Почта скопирована"
+            const originalText = tooltip.textContent;
+            tooltip.textContent = 'Почта скопирована!';
             tooltip.classList.add('show');
-            setTimeout(() => tooltip.classList.remove('show'), 2000);
+
+            // Через 2 секунды возвращаем текст обратно
+            setTimeout(() => {
+                tooltip.classList.remove('show');
+                tooltip.textContent = originalText;
+            }, 2000);
         } catch (err) {
             console.error('Ошибка копирования: ', err);
             window.location.href = `mailto:${email}`;
