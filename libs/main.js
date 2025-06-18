@@ -231,12 +231,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleInfoBtn = document.getElementById('toggleInfoModal');
     const closeInfoBtn = document.getElementById('closeInfoModal');
 
-    toggleInfoBtn.addEventListener('click', () => infoModal.style.display = 'block');
-    closeInfoBtn.addEventListener('click', () => infoModal.style.display = 'none');
+    // Функция для показа с анимацией
+    function showInfoModal() {
+        infoModal.classList.remove('animate-out');
+        infoModal.style.display = 'block';
+        void infoModal.offsetWidth; // перезапуск анимации
+        infoModal.classList.add('animate-in');
+    }
+
+    // Функция для скрытия с анимацией
+    function hideInfoModal() {
+        infoModal.classList.remove('animate-in');
+        infoModal.classList.add('animate-out');
+        setTimeout(() => {
+            infoModal.style.display = 'none';
+        }, 300); // должно совпадать с CSS анимацией
+    }
+
+    toggleInfoBtn.addEventListener('click', showInfoModal);
+    closeInfoBtn.addEventListener('click', hideInfoModal);
 
     window.addEventListener('click', e => {
-        if (e.target === infoModal) infoModal.style.display = 'none';
+        if (e.target === infoModal) {
+            hideInfoModal();
+        }
     });
+
 
     // === САЙДБАР ===
     const sidebar = document.getElementById('sidebar');
