@@ -152,50 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('markersData не найден или не массив');
     }
 
-    // === ФИЛЬТРЫ ===
-    const checkboxes = document.querySelectorAll('.filter-check');
-
-    function updateFilteredShops(selectedCategories) {
-        Object.entries(layersByCategory).forEach(([cat, group]) => {
-            if (selectedCategories.includes(cat)) {
-                map.addLayer(group);
-            } else {
-                map.removeLayer(group);
-            }
-        });
-    }
-
-    function updateFilters() {
-        const selected = Array.from(checkboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
-        updateFilteredShops(selected);
-    }
-
-    checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
-    updateFilters();
-
-    function initSelectAllButton() {
-        const selectAllBtn = document.getElementById('selectAllFilters');
-        if (!selectAllBtn || !checkboxes.length) return;
-
-        function updateButtonText() {
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
-        }
-
-        selectAllBtn.addEventListener('click', () => {
-            const isAnyUnchecked = Array.from(checkboxes).some(cb => !cb.checked);
-            checkboxes.forEach(cb => cb.checked = isAnyUnchecked);
-            updateButtonText();
-            updateFilters();
-        });
-
-        checkboxes.forEach(cb => cb.addEventListener('change', updateButtonText));
-        updateButtonText();
-    }
-    initSelectAllButton();
-
     // === ПОИСК ===
     const searchInput = document.getElementById('shop-search');
     const searchResults = document.getElementById('search-results');
@@ -336,52 +292,180 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open('https://t.me/petergriffinfunnymoments', '_blank');
     });
 
+    // === ФИЛЬТРЫ ===
+    const checkboxes = document.querySelectorAll('.filter-check');
+
+    function updateFilteredShops(selectedCategories) {
+        Object.entries(layersByCategory).forEach(([cat, group]) => {
+            if (selectedCategories.includes(cat)) {
+                map.addLayer(group);
+            } else {
+                map.removeLayer(group);
+            }
+        });
+    }
+
+    function updateFilters() {
+        const selected = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        updateFilteredShops(selected);
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
+    updateFilters();
+
+    function initSelectAllButton() {
+        const selectAllBtn = document.getElementById('selectAllFilters');
+        if (!selectAllBtn || !checkboxes.length) return;
+
+        function updateButtonText() {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            selectAllBtn.textContent = allChecked ? 'Снять все' : 'Выбрать все';
+        }
+
+        selectAllBtn.addEventListener('click', () => {
+            const isAnyUnchecked = Array.from(checkboxes).some(cb => !cb.checked);
+            checkboxes.forEach(cb => cb.checked = isAnyUnchecked);
+            updateButtonText();
+            updateFilters();
+        });
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateButtonText));
+        updateButtonText();
+    }
+    initSelectAllButton();
+
     // === ПАНЕЛЬ ФИЛЬТРОВ ===
     const toggleFilterBtn = document.getElementById('toggleFilterPanel');
     const filterPanel = document.getElementById('filterPanel');
     const closeFilterBtn = document.getElementById('closeFilterPanel');
 
+    // Показать / скрыть панель
     toggleFilterBtn.addEventListener('click', () => {
-        filterPanel.style.display = (filterPanel.style.display === 'none' || !filterPanel.style.display) ? 'block' : 'none';
+        filterPanel.classList.toggle('show');
     });
 
     closeFilterBtn.addEventListener('click', () => {
-        filterPanel.style.display = 'none';
+        filterPanel.classList.remove('show');
     });
 
+    // === Drag-and-Drop функциональность ===
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    const dragHandle = filterPanel.querySelector('.drag-handle');
+
+    dragHandle.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - filterPanel.getBoundingClientRect().left;
+        offsetY = e.clientY - filterPanel.getBoundingClientRect().top;
+        filterPanel.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        filterPanel.style.cursor = 'default';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            // Получаем размеры экрана и панели
+            const panelWidth = filterPanel.offsetWidth;
+            const panelHeight = filterPanel.offsetHeight;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Вычисляем координаты с учётом границ
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+
+            x = Math.max(0, Math.min(x, windowWidth - panelWidth));
+            y = Math.max(0, Math.min(y, windowHeight - panelHeight));
+
+            // Применяем
+            filterPanel.style.left = `${x}px`;
+            filterPanel.style.top = `${y}px`;
+            filterPanel.style.right = 'auto';
+        }
+    });
+
+
+
+
     // === ЛОГИКА ОТОБРАЖЕНИЕ ОКРУГОВ ===
-    let okrugBorderLayer = null;
+    let activeOkrugs = new Set();
+    let okrugBorderLayers = {}; // Хранит границы по округам
 
     document.querySelectorAll('.okrug-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const okrug = btn.dataset.okrug;
 
-            // Скрываем маркеры вне округа
+            // Переключаем состояние округа
+            if (activeOkrugs.has(okrug)) {
+                activeOkrugs.delete(okrug);
+                btn.classList.remove('active');
+
+                // Удаляем маркеры этого округа
+                allMarkers.forEach(m => {
+                    if (m.okrug === okrug) {
+                        map.addLayer(m.marker); // Опционально: можно скрывать, но в данном случае оставляем
+                    }
+                });
+
+                // Удаляем границу округа
+                if (okrugBorderLayers[okrug]) {
+                    map.removeLayer(okrugBorderLayers[okrug]);
+                    delete okrugBorderLayers[okrug];
+                }
+            } else {
+                activeOkrugs.add(okrug);
+                btn.classList.add('active');
+
+                // Показываем маркеры этого округа
+                allMarkers.forEach(m => {
+                    if (m.okrug === okrug) {
+                        map.addLayer(m.marker);
+                    }
+                });
+
+                // Загружаем и отображаем границу, если ещё не загружена
+                fetch(`./data/borders/${okrug}.geojson`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const borderLayer = L.geoJSON(data, {
+                            style: { color: 'blue', weight: 3, opacity: 0.8 }
+                        }).addTo(map);
+                        okrugBorderLayers[okrug] = borderLayer;
+
+                        // Центрируем карту на первый выбранный округ
+                        if (activeOkrugs.size === 1) {
+                            map.fitBounds(borderLayer.getBounds());
+                        }
+                    })
+                    .catch(err => console.error(`Ошибка загрузки границы ${okrug}:`, err));
+            }
+
+            updateVisibleMarkers();
+        });
+    });
+
+    // Функция отображения маркеров по выбранным округам
+    function updateVisibleMarkers() {
+        if (activeOkrugs.size === 0) {
+            // Если ни один округ не выбран — показываем всё
+            allMarkers.forEach(m => map.addLayer(m.marker));
+        } else {
             allMarkers.forEach(m => {
-                if (m.okrug === okrug) {
+                if (activeOkrugs.has(m.okrug)) {
                     map.addLayer(m.marker);
                 } else {
                     map.removeLayer(m.marker);
                 }
             });
-
-            // Убираем старую границу
-            if (okrugBorderLayer) {
-                map.removeLayer(okrugBorderLayer);
-            }
-
-            // Загружаем границу округа
-            fetch(`./data/borders/${okrug}.geojson`)
-                .then(res => res.json())
-                .then(data => {
-                    okrugBorderLayer = L.geoJSON(data, {
-                        style: { color: 'blue', weight: 3, opacity: 0.8 }
-                    }).addTo(map);
-                    map.fitBounds(okrugBorderLayer.getBounds());
-                })
-                .catch(err => console.error(`Ошибка загрузки границы ${okrug}:`, err));
-        });
-    });
+        }
+    }
 
     // === ЛОГИКА ОЧИСТКИ ПОИСКА ===
     const clearBtn = document.getElementById('clearSearchBtn');

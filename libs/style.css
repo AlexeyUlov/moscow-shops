@@ -457,7 +457,6 @@ body {
     z-index: 1050;
     max-width: 800px;
     width: 85%;
-    font-family: Arial, sans-serif;
     line-height: 1.5;
     color: #333;
 }
@@ -728,53 +727,162 @@ body {
 
 /* === ПАНЕЛЬ ФИЛЬТРОВ === */
 .filter-panel {
-    display: none;
     position: fixed;
-    top: 70px;
-    right: 20px;
+    top: 14px;
+    right: 150px;
     width: 280px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1050;
-    padding: 16px 24px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 9999 !important;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .filter-panel.show {
-    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.filter-panel h5 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+}
+
+.filter-panel h6 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 16px 0 8px;
 }
 
 .filter-panel .form-check {
     display: flex;
     align-items: center;
-    padding: 8px 0 8px 15px;
-    margin: 0;
+    padding: 6px 0 6px 12px;
+    font-size: 14px;
+    color: #111;
 }
 
 .filter-panel .form-check-input {
     margin-right: 10px;
 }
 
-.filter-panel .form-check-label {
-    font-size: 14px;
-    cursor: pointer;
-}
-
 #selectAllFilters {
-    margin-top: 12px;
-    padding: 8px;
+    margin-top: 14px;
+    padding: 8px 12px;
     font-size: 14px;
-    border-radius: 8px;
-    border: 1px solid #3366FF;
-    color: #3366FF;
+    border-radius: 10px;
+    border: 2px solid #33cccc;
+    color: #33cccc;
     background: transparent;
-    transition: all 0.2s;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 #selectAllFilters:hover {
-    background: #3366FF;
+    background: #33cccc;
     color: white;
 }
+
+.okrug-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    border: 2px solid #33cccc;
+    color: #33cccc;
+    background: transparent;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.okrug-btn:hover {
+    background: #33cccc;
+    color: white;
+}
+
+.okrug-btn.active {
+    background: #33cccc;
+    color: white;
+}
+
+.btn-close {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.filter-drag-strip {
+    width: 90px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 3px;
+    margin: -10px auto 10px auto;
+    cursor: grab;
+    user-select: none;
+}
+
+/* Скрываем дефолтный чекбокс */
+.form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #33cccc;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.2s, border-color 0.2s;
+    background-color: white;
+    background-image: none !important;
+}
+
+/* При наведении меняем цвет рамки */
+.form-check-input:hover {
+    border-color: #28a7a7;
+}
+
+/* Когда чекбокс выбран */
+.form-check-input:checked {
+    background-color: #33cccc;
+    border-color: #33cccc;
+}
+
+/* Добавляем галочку */
+.form-check-input:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Фокус */
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(51, 204, 204, 0.5);
+}
+
+
+
 
 /* === УЛУЧШЕННЫЙ ДИЗАЙН КАРТОЧКИ МАГАЗИНА === */
 .shop-info-header {
