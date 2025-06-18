@@ -97,7 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
     `;
-        const marker = L.marker([lat, lon], { title, icon });
+        const marker = L.marker([lat, lon], { icon });
+
+        marker.bindTooltip(title_new, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -30],
+            className: 'custom-tooltip'
+        });
 
         marker.on('click', e => {
             openSidebar();

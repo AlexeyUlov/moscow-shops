@@ -18,6 +18,40 @@ body {
     z-index: 0;
 }
 
+/* === ПОДСКАЗКИ ДЛЯ МАРКЕРОВ === */
+.custom-tooltip {
+    background: linear-gradient(135deg, #33cccc, #00b3b3);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    font-family: 'Segoe UI', sans-serif;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.leaflet-tooltip.custom-tooltip {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    white-space: nowrap;
+    will-change: opacity, transform;
+}
+
+.leaflet-tooltip.custom-tooltip.leaflet-tooltip-open {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* === BOOTSTRAP КОНТРОЛЫ === */
 .custom-zoom-controls {
     position: fixed;
