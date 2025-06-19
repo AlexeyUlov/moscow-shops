@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const fullPopupHTML = `
         <div class="shop-info-content">
             <div class="shop-info-details">
+
+                <div class="shop-info-label">В прошлом:</div>
+                <div class="shop-info-value">${title || 'нет данных'}</div>
+
                 <div class="shop-info-label">Адрес:</div>
                 <div class="shop-info-value">${options.address || 'нет данных'}</div>
                 
